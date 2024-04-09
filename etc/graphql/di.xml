@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="adyen_merchant_account" xsi:type="string">payment/adyen_abstract/merchant_account</item>
+                <item name="adyen_client_key_test" xsi:type="string">payment/adyen_abstract/client_key_test</item>
+                <item name="adyen_client_key_live" xsi:type="string">payment/adyen_abstract/client_key_live</item>
+                <item name="adyen_environment_mode" xsi:type="string">payment/adyen_abstract/demo_mode</item>
+                <item name="adyen_vault_enabled" xsi:type="string">payment/adyen_oneclick/active</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

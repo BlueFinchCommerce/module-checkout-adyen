@@ -8,7 +8,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "Gene\\TemplateModule\\": ""
+      "Gene\\BetterCheckoutAdyen\\": ""
     }
   },
   "require": {
