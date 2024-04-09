@@ -1,0 +1,12 @@
+type StoreConfig {
+    adyen_merchant_account: String @doc(description: "Adyen merchant account")
+    adyen_client_key_test: String @doc(description: "Adyen client key test")
+    adyen_client_key_live: String @doc(description: "Adyen client key live")
+    adyen_environment_mode: String @doc(description: "Adyen environment mode")
+    adyen_vault_enabled: Boolean @doc(description: "Adyen vault enabled")
+    adyen_version_number: String @resolver(class: "\\Gene\\BetterCheckoutAdyen\\Model\\Resolver\\AdyenVersionNumber") @doc(description: "Adyen module version number.")
+}
+
+input AdyenAdditionalDataCc {
+    is_active_payment_token_enabler: Boolean @doc(description: "Extend Adyen to allow cards to be saved.")
+}
