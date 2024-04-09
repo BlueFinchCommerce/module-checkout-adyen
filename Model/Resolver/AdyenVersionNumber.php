@@ -29,7 +29,8 @@ class AdyenVersionNumber implements ResolverInterface
         private readonly ComponentRegistrarInterface $componentRegistrar,
         private readonly ReadFactory $readFactory,
         private readonly SerializerInterface $serializer
-    ) {}
+    ) {
+    }
 
     /**
      * @inheritDoc
