@@ -1,0 +1,15 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Gene\BetterCheckout\ViewModel\Assets $assetViewModel
+ */
+?>
+
+<script>
+    window.geneCheckout = window.geneCheckout || {};
+
+    window.geneCheckout.expressPaymentMethods = window.geneCheckout.expressPaymentMethods || {};
+
+    window.geneCheckout.expressPaymentMethods.AdyenGooglePay = "<?= $escaper->escapeJs($block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/GooglePay/GooglePay.js')) ?>";
+</script>
