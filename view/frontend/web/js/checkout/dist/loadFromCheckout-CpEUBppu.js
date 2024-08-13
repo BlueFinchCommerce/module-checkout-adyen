@@ -1,4 +1,4 @@
-export default async (components) => {
+var loadFromCheckout = async (components) => {
   const mappings = typeof components === 'string'
     ? [components]
     : components;
@@ -15,3 +15,5 @@ export default async (components) => {
 
   return importedComponents;
 };
+
+export { loadFromCheckout as l };

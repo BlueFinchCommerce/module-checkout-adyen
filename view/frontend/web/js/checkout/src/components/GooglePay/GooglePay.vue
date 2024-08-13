@@ -15,6 +15,10 @@ import { mapActions } from 'pinia';
 import AdyenCheckout from '@adyen/adyen-web';
 import useAdyenStore from '../../stores/PaymentStores/AdyenStore';
 
+import getAdyenProductionMode from '../../helpers/getAdyenProductionMode';
+
+import getAdyenPaymentStatus from '../../services/getAdyenPaymentStatus';
+
 import '@adyen/adyen-web/dist/adyen.css';
 
 import loadFromCheckout from '../../helpers/loadFromCheckout';
@@ -33,12 +37,10 @@ export default {
   },
   async created() {
     const [
-      getAdyenProductionMode,
       cartStore,
       configStore,
       paymentStore,
     ] = await loadFromCheckout([
-      'helpers.getAdyenProductionMode',
       'stores.useCartStore',
       'stores.useConfigStore',
       'stores.usePaymentStore',
@@ -47,6 +49,7 @@ export default {
     paymentStore.addExpressMethod(this.key);
 
     await configStore.getInitialConfig();
+    await this.getInitialConfigValues();
     await cartStore.getCart();
 
     const paymentMethodsResponse = await this.getPaymentMethodsResponse();
@@ -78,6 +81,7 @@ export default {
         enabled: false,
       },
     };
+
     this.checkout = await AdyenCheckout(configuration);
     const googlePayComponent = this.checkout.create('googlepay', googlePayConfiguration);
 
@@ -102,7 +106,7 @@ export default {
     document.head.appendChild(googlePayScript);
   },
   methods: {
-    ...mapActions(useAdyenStore, ['getPaymentMethodsResponse']),
+    ...mapActions(useAdyenStore, ['getInitialConfigValues', 'getPaymentMethodsResponse']),
 
     setOrderId(orderId) {
       this.orderId = orderId;
@@ -130,7 +134,6 @@ export default {
         document.body.classList.remove('gene-checkout-threeds-opened');
 
         this.setLoadingState(true);
-        const getAdyenPaymentStatus = await loadFromCheckout('helpers.getAdyenPaymentStatus');
         const response = await getAdyenPaymentStatus(this.orderId);
 
         this.handleAdyenResponse(response);
@@ -144,11 +147,9 @@ export default {
 
     async getGooglePayConfiguration(googlePayConfig) {
       const [
-        getAdyenProductionMode,
         cartStore,
         configStore,
       ] = await loadFromCheckout([
-        'helpers.getAdyenProductionMode',
         'stores.useCartStore',
         'stores.useConfigStore',
       ]);
@@ -219,22 +220,21 @@ export default {
       return resolve();
     },
 
-    async onPaymentDataChanged(data) {
-      const [
-        formatPrice,
-        getShippingMethods,
-        cartStore,
-        configStore,
-        shippingMethodsStore,
-      ] = await loadFromCheckout([
-        'helpers.formatPrice',
-        'services.getShippingMethods',
-        'stores.cartStore',
-        'stores.useConfigStore',
-        'stores.useShippingMethodsStore',
-      ]);
-
-      return new Promise((resolve) => {
+    onPaymentDataChanged(data) {
+      return new Promise(async (resolve) => {
+        const [
+          formatPrice,
+          getShippingMethods,
+          cartStore,
+          configStore,
+          shippingMethodsStore,
+        ] = await loadFromCheckout([
+          'helpers.formatPrice',
+          'services.getShippingMethods',
+          'stores.useCartStore',
+          'stores.useConfigStore',
+          'stores.useShippingMethodsStore',
+        ]);
         const address = {
           city: data.shippingAddress.locality,
           country_code: data.shippingAddress.countryCode,
@@ -319,18 +319,18 @@ export default {
       });
     },
 
-    async onPaymentAuthorized(data) {
-      const [
-        createPayment,
-        setAddressesOnCart,
-        cartStore,
-      ] = await loadFromCheckout([
-        'services.createPayment',
-        'services.setAddressesOnCart',
-        'stores.cartStore',
-      ]);
+    onPaymentAuthorized(data) {
+      return new Promise(async (resolve) => {
+        const [
+          createPaymentGraphQl,
+          setAddressesOnCart,
+          cartStore,
+        ] = await loadFromCheckout([
+          'services.createPaymentGraphQl',
+          'services.setAddressesOnCart',
+          'stores.useCartStore',
+        ]);
 
-      return new Promise((resolve) => {
         // If there is no select shipping method at this point display an error.
         if (!cartStore.cart.is_virtual && !cartStore.cart.shipping_addresses[0].selected_shipping_method) {
           resolve({
@@ -346,14 +346,14 @@ export default {
         const { email } = data;
         const { billingAddress } = data.paymentMethodData.info;
         const { phoneNumber: billingPhoneNumber } = billingAddress;
-        const mapBillingAddress = this.mapAddress(billingAddress, email, billingPhoneNumber);
+        const mapBillingAddress = await this.mapAddress(billingAddress, email, billingPhoneNumber);
 
         let mapShippingAddress = null;
 
         if (!cartStore.cart.is_virtual) {
           const { shippingAddress } = data;
           const { phoneNumber: shippingPhoneNumber } = shippingAddress;
-          mapShippingAddress = this.mapAddress(shippingAddress, email, shippingPhoneNumber);
+          mapShippingAddress = await this.mapAddress(shippingAddress, email, shippingPhoneNumber);
         }
 
         setAddressesOnCart(mapShippingAddress, mapBillingAddress, email)
@@ -376,7 +376,7 @@ export default {
             };
             return paymentMethod;
           })
-          .then(createPayment)
+          .then(createPaymentGraphQl)
           .then((orderNumber) => {
             this.setOrderId(orderNumber);
             resolve({
@@ -437,14 +437,11 @@ export default {
     },
 
     async mapAddress(address, email, telephone) {
-      const [
-        configStore,
-      ] = await loadFromCheckout([
-        'stores.useConfigStore',
-      ]);
+      const configStore = await loadFromCheckout('stores.useConfigStore');
 
       const [firstname, ...lastname] = address.name.split(' ');
       const regionId = configStore.getRegionId(address.countryCode, address.administrativeArea);
+
       return {
         street: [
           address.address1,
@@ -469,5 +466,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./styles.scss";
+@import "./GooglePayStyles.scss";
 </style>
