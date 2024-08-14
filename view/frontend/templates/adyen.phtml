@@ -1,0 +1,32 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Gene\BetterCheckout\ViewModel\Assets $assetViewModel
+ */
+
+$applePay = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/ApplePay/ApplePay.js');
+$googlePay = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/GooglePay/GooglePay.js');
+$dropIn = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/DropIn/DropIn.js');
+$icons = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/FooterIcons/FooterIcons.js');
+$onCreate = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/callbacks/onCreate.js');
+$styles = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/styles.css');
+?>
+
+<script>
+    window.geneCheckout = window.geneCheckout || {};
+
+    window.geneCheckout.expressPaymentMethods = window.geneCheckout.expressPaymentMethods || {};
+    window.geneCheckout.paymentMethods = window.geneCheckout.paymentMethods || {};
+    window.geneCheckout.footerPaymentIcons = window.geneCheckout.footerPaymentIcons || {};
+    window.geneCheckout.callbacks = window.geneCheckout.callbacks || {};
+    window.geneCheckout.callbacks.onCreate = window.geneCheckout.callbacks.onCreate || {};
+
+    window.geneCheckout.expressPaymentMethods.AdyenApplePay = "<?= $escaper->escapeJs($applePay) ?>";
+    window.geneCheckout.expressPaymentMethods.AdyenGooglePay = "<?= $escaper->escapeJs($googlePay) ?>";
+    window.geneCheckout.paymentMethods.Adyen = "<?= $escaper->escapeJs($dropIn) ?>";
+    window.geneCheckout.footerPaymentIcons.Adyen = "<?= $escaper->escapeJs($icons) ?>";
+    window.geneCheckout.callbacks.onCreate.adyenOnCreate = "<?= $escaper->escapeJs($onCreate) ?>";
+</script>
+
+<link rel="stylesheet" href="<?= $escaper->escapeHtmlAttr($styles) ?>" />
