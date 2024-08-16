@@ -114,12 +114,12 @@ export default {
     },
 
     async setLoadingState(state) {
-      const loadingStore = await loadFromCheckout('stores.useLoadingStore');
+      const [loadingStore] = await loadFromCheckout('stores.useLoadingStore');
       loadingStore.setLoadingState(state);
     },
 
     async setErrorMessage(message) {
-      const paymentStore = await loadFromCheckout('stores.usePaymentStore');
+      const [paymentStore] = await loadFromCheckout('stores.usePaymentStore');
       paymentStore.setErrorMessage(message);
     },
 
@@ -437,7 +437,7 @@ export default {
     },
 
     async mapAddress(address, email, telephone) {
-      const configStore = await loadFromCheckout('stores.useConfigStore');
+      const [configStore] = await loadFromCheckout('stores.useConfigStore');
 
       const [firstname, ...lastname] = address.name.split(' ');
       const regionId = configStore.getRegionId(address.countryCode, address.administrativeArea);
