@@ -5,11 +5,13 @@ import multiInput from 'rollup-plugin-multi-input';
 import commonjs from '@rollup/plugin-commonjs';
 import scss from 'rollup-plugin-scss';
 import svg from 'rollup-plugin-svg';
+import terser from '@rollup/plugin-terser';
 
 export default {
   input: ['src/callbacks/**/*.js', 'src/components/**/*.vue'],
   output: {
     dir: 'dist',
+    chunkFileNames: "[name]-[hash].min.js"
   },
   plugins: [
     vue(),
@@ -22,5 +24,6 @@ export default {
     commonjs(),
     scss({ output: 'dist/styles.css' }),
     svg(),
+    terser(),
   ],
 };
