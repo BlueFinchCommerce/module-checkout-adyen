@@ -15,54 +15,6 @@
     padding: var(--form-details-padding-desktop, 40px 40px 70px);
   }
 }
-#adyen-apple-pay {
-  line-height: var(--button__line-height);
-}
-#adyen-apple-pay.text-loading {
-  border-radius: var(--button__text-placeholder-bg-radius);
-  height: var(--braintree-express-button-height, 48px);
-}
-#adyen-apple-pay > button {
-  border-radius: var(--button__border-radius);
-  height: var(--adyen-express-button-height, 48px);
-  overflow: hidden;
-  width: 100%;
-}
-
-.adyen-footer-icons {
-  width: var(--footer-icons-width-mobile, auto);
-  height: var(--footer-icons-min-height, 25px);
-}
-.adyen-footer-icons ul {
-  padding: 0;
-  margin: var(--footer-icons-margin-mobile, var(--indent__s) 0);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: var(--footer-icons-align-items, center);
-  justify-content: center;
-  height: 100%;
-}
-.adyen-footer-icons ul li {
-  display: block;
-  list-style: none;
-  margin: var(--footer-icon-margin-mobile, 0 10px);
-  height: 100%;
-}
-.adyen-footer-icons ul li img {
-  height: 100%;
-}
-
-@media (min-width: 768px) {
-  .adyen-footer-icons {
-    width: var(--footer-icons-width-desktop, auto);
-  }
-  .adyen-footer-icons ul {
-    margin: 0 0 0;
-  }
-  .adyen-footer-icons ul li {
-    margin: var(--footer-icon-margin, 0 10px);
-  }
-}
 #adyen-google-pay {
   line-height: var(--button__line-height);
 }
@@ -273,6 +225,54 @@
     background: transparent;
   }
 }
+.adyen-footer-icons {
+  width: var(--footer-icons-width-mobile, auto);
+  height: var(--footer-icons-min-height, 25px);
+}
+.adyen-footer-icons ul {
+  padding: 0;
+  margin: var(--footer-icons-margin-mobile, var(--indent__s) 0);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: var(--footer-icons-align-items, center);
+  justify-content: center;
+  height: 100%;
+}
+.adyen-footer-icons ul li {
+  display: block;
+  list-style: none;
+  margin: var(--footer-icon-margin-mobile, 0 10px);
+  height: 100%;
+}
+.adyen-footer-icons ul li img {
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .adyen-footer-icons {
+    width: var(--footer-icons-width-desktop, auto);
+  }
+  .adyen-footer-icons ul {
+    margin: 0 0 0;
+  }
+  .adyen-footer-icons ul li {
+    margin: var(--footer-icon-margin, 0 10px);
+  }
+}
+#adyen-apple-pay {
+  line-height: var(--button__line-height);
+}
+#adyen-apple-pay.text-loading {
+  border-radius: var(--button__text-placeholder-bg-radius);
+  height: var(--braintree-express-button-height, 48px);
+}
+#adyen-apple-pay > button {
+  border-radius: var(--button__border-radius);
+  height: var(--adyen-express-button-height, 48px);
+  overflow: hidden;
+  width: 100%;
+}
+
 .adyen-checkout__payment-method-tick {
   align-self: self-start;
   display: flex;

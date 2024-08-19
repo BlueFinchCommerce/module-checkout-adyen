@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import AdyenCheckout from '@adyen/adyen-web';
 import useAdyenStore from '../../stores/PaymentStores/AdyenStore';
 
@@ -34,6 +34,9 @@ export default {
       orderId: null,
       threeDSVisible: false,
     };
+  },
+  computed: {
+    ...mapState(useAdyenStore, ['isAdyenVersion']),
   },
   async created() {
     const [
@@ -114,12 +117,12 @@ export default {
     },
 
     async setLoadingState(state) {
-      const loadingStore = await loadFromCheckout('stores.useLoadingStore');
+      const [loadingStore] = await loadFromCheckout('stores.useLoadingStore');
       loadingStore.setLoadingState(state);
     },
 
     async setErrorMessage(message) {
-      const paymentStore = await loadFromCheckout('stores.usePaymentStore');
+      const [paymentStore] = await loadFromCheckout('stores.usePaymentStore');
       paymentStore.setErrorMessage(message);
     },
 
@@ -367,9 +370,11 @@ export default {
               browserInfo: this.browserInfo,
             });
 
+            const additionalDataKey = this.isAdyenVersion('8') ? 'adyen_additional_data_hpp' : 'adyen_additional_data';
+
             const paymentMethod = {
-              code: 'adyen_hpp',
-              adyen_additional_data_hpp: {
+              code: this.isAdyenVersion('8') ? 'adyen_hpp' : 'adyen_googlepay',
+              [additionalDataKey]: {
                 brand_code: 'googlepay',
                 stateData,
               },
@@ -437,7 +442,7 @@ export default {
     },
 
     async mapAddress(address, email, telephone) {
-      const configStore = await loadFromCheckout('stores.useConfigStore');
+      const [configStore] = await loadFromCheckout('stores.useConfigStore');
 
       const [firstname, ...lastname] = address.name.split(' ');
       const regionId = configStore.getRegionId(address.countryCode, address.administrativeArea);

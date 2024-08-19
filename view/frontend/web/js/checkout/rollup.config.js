@@ -5,11 +5,14 @@ import multiInput from 'rollup-plugin-multi-input';
 import commonjs from '@rollup/plugin-commonjs';
 import scss from 'rollup-plugin-scss';
 import svg from 'rollup-plugin-svg';
+import terser from '@rollup/plugin-terser';
+import path from 'path';
 
 export default {
   input: ['src/callbacks/**/*.js', 'src/components/**/*.vue'],
   output: {
     dir: 'dist',
+    chunkFileNames: "[name]-[hash].min.js"
   },
   plugins: [
     vue(),
@@ -18,9 +21,12 @@ export default {
       'process.env.NODE_ENV': JSON.stringify('production'),
       preventAssignment: true,
     }),
-    multiInput.default(),
+    multiInput.default({
+      transformOutputPath: (output, input) => `${output.replace(/(.+)+(.js|.vue)/, '$1.min$2')}`
+    }),
     commonjs(),
     scss({ output: 'dist/styles.css' }),
     svg(),
+    terser(),
   ],
 };
