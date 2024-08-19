@@ -14,6 +14,7 @@ export default defineStore('adyenStore', {
     adyenVaultEnabled: false,
     keyLive: '',
     keyTest: '',
+    version: '',
   }),
   getters: {
     isAdyenAvailable: async () => {
@@ -25,10 +26,14 @@ export default defineStore('adyenStore', {
       const { availableMethods } = paymentStore;
       return availableMethods.some(({ code }) => code.includes('adyen'));
     },
-    getAdyenClientKey: async (state) => {
-      console.log(await getAdyenProductionMode());
-      return await getAdyenProductionMode() ? state.keyLive : state.keyTest;
-    },
+    getAdyenClientKey: async (state) => (
+      await getAdyenProductionMode() ? state.keyLive : state.keyTest
+    ),
+    isAdyenVersion: (state) => (
+      (version) => (
+        state.version.startsWith(version)
+      )
+    ),
   },
   actions: {
     setData(data) {
@@ -48,6 +53,7 @@ export default defineStore('adyenStore', {
           adyen_vault_enabled
           adyen_client_key_live
           adyen_client_key_test
+          adyen_version_number
         }
       }`).then(this.handleInitialConfig);
 
@@ -62,6 +68,7 @@ export default defineStore('adyenStore', {
           adyenVaultEnabled: config.data.storeConfig.adyen_vault_enabled,
           keyLive: config.data.storeConfig.adyen_client_key_live,
           keyTest: config.data.storeConfig.adyen_client_key_test,
+          version: config.data.storeConfig.adyen_version_number,
         });
       }
     },

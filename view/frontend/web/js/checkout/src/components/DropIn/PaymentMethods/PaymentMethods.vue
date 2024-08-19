@@ -168,7 +168,6 @@ export default {
 
     this.storedPaymentSelected = true;
 
-    console.log(await this.getAdyenClientKey);
     const extensionAttributes = getPaymentExtensionAttributes();
     const configuration = {
       paymentMethodsResponse,
@@ -201,7 +200,7 @@ export default {
             .then(getAdyenPaymentStatus)
             .then((response) => this.handlePaymentStatus(response, dropin))
             .catch((error) => {
-              this.displayError(dropin, error.message).bind(this);
+              this.displayError(dropin, error.message);
               throw Error(error);
             });
         } else {
@@ -221,7 +220,6 @@ export default {
         },
       },
     };
-    console.log('end');
 
     const adyenCheckout = await AdyenCheckout(configuration);
     this.checkout = adyenCheckout
@@ -235,7 +233,6 @@ export default {
       });
     this.checkout.mount(`#${this.id}`);
 
-    console.log(this.checkout);
     // If we are on the stored payments compent (and some stored payments exist) then
     // modify the methods to show the payment cards rather that input radios.
     if (this.storedPayments && this.storedPaymentMethods.length) {
@@ -325,7 +322,7 @@ export default {
 
     getPaymentMethod(state) {
       const paymentMethod = {
-        code: state.data.paymentMethod.type === 'scheme' ? 'adyen_cc' : 'adyen_hpp',
+        code: state.data.paymentMethod.type === 'scheme' ? 'adyen_cc' : `adyen_${state.data.paymentMethod.type}`,
       };
 
       if (state.data?.paymentMethod?.storedPaymentMethodId) {
@@ -342,7 +339,7 @@ export default {
           is_active_payment_token_enabler: !!state.data.storePaymentMethod,
         };
       } else {
-        paymentMethod.adyen_additional_data_hpp = {
+        paymentMethod.adyen_additional_data = {
           brand_code: state.data.paymentMethod.type,
           stateData,
         };

@@ -33,7 +33,7 @@ export default {
   },
 
   computed: {
-    ...mapState(useAdyenStore, ['getAdyenClientKey']),
+    ...mapState(useAdyenStore, ['getAdyenClientKey', 'isAdyenVersion']),
   },
 
   async created() {
@@ -228,9 +228,11 @@ export default {
               browserInfo: this.browserInfo,
             });
 
+            const additionalDataKey = this.isAdyenVersion('8') ? 'adyen_additional_data_hpp' : 'adyen_additional_data';
+
             const paymentMethod = {
-              code: 'adyen_hpp',
-              adyen_additional_data_hpp: {
+              code: this.isAdyenVersion('8') ? 'adyen_hpp' : 'adyen_applepay',
+              [additionalDataKey]: {
                 brand_code: 'applepay',
                 stateData,
               },
