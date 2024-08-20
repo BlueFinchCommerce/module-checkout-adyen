@@ -1,7 +1,7 @@
 <template>
   <div class="payment-step">
-    <SavedDeliveryAddress />
-    <SavedShippingMethod />
+    <component :is="SavedDeliveryAddress" />
+    <component :is="SavedShippingMethod" />
     <div class="payment-page">
       <div class="payment-form">
         <div id="amazonpay_order-container" />
@@ -46,74 +46,69 @@
 <script>
 // Stores
 import { mapActions, mapState } from 'pinia';
-import useAdyenStore from '@/stores/PaymentStores/AdyenStore';
-import useCartStore from '@/stores/CartStore';
-import useConfigStore from '@/stores/ConfigStores/ConfigStore';
-import useCustomerStore from '@/stores/CustomerStore';
-import useStepsStore from '@/stores/StepsStore';
+import useAdyenStore from '../../stores/PaymentStores/AdyenStore';
 
 import AdyenCheckout from '@adyen/adyen-web';
 import '@adyen/adyen-web/dist/adyen.css';
 
-// Components
-import SavedDeliveryAddress from
-  '@/components/Steps/CustomerInfoPage/Addresses/SavedDeliveryAddess/SavedDeliveryAddess.vue';
-import SavedShippingMethod
-  from '@/components/Steps/PaymentPage/SavedShippingMethod/SavedShippingMethod.vue';
-
 // Services
-import createPayment from '@/services/payments/createPaymentGraphQl';
-import getAdyenPaymentStatus from '@/services/adyen/getAdyenPaymentStatus';
-import getAdyenPaymentDetails from '@/services/adyen/getAdyenPaymentDetails';
-import refreshCustomerData from '@/services/customer/refreshCustomerData';
+import getAdyenPaymentStatus from '../../services/getAdyenPaymentStatus';
+import getAdyenPaymentDetails from '../../services/getAdyenPaymentDetails';
 
 // Helpers
-import getAdyenProductionMode from '@/helpers/payment/getAdyenProductionMode';
-import formatPrice from '@/helpers/payment/formatPrice';
-import getCartSectionNames from '@/helpers/cart/getCartSectionNames';
-import getPaymentExtensionAttributes from '@/helpers/payment/getPaymentExtensionAttributes';
-import getUrlQuery from '@/helpers/storeConfigs/getUrlQuery';
-import getSuccessPageUrl from '@/helpers/cart/getSuccessPageUrl';
+import getAdyenProductionMode from '../../helpers/getAdyenProductionMode';
+
+import loadFromCheckout from '../../helpers/loadFromCheckout';
 
 export default {
   name: 'AdyenAmazonReview',
-  components: {
-    SavedDeliveryAddress,
-    SavedShippingMethod,
-  },
   data() {
     return {
       orderId: null,
       state: 'loading',
       errorMessage: '',
+      SavedDeliveryAddress: null,
+      SavedShippingMethod: null,
     };
   },
   computed: {
-    ...mapState(useAdyenStore, ['getAdyenClientKey']),
-    ...mapState(useCartStore, ['cartGrandTotal']),
-    ...mapState(useConfigStore, ['currencyCode', 'locale', 'storeCode']),
-    ...mapState(useCustomerStore, ['customer', 'getSelectedBillingAddress']),
-    formattedTotal() {
-      return formatPrice(this.cartGrandTotal / 100);
-    },
+    ...mapState(useAdyenStore, ['getAdyenClientKey', 'isAdyenVersion']),
   },
   async created() {
+    const [
+      SavedDeliveryAddress,
+      SavedShippingMethod,
+      getUrlQuery,
+      createPaymentGraphQl,
+      cartStore,
+      configStore,
+    ] = await loadFromCheckout([
+      'components.SavedDeliveryAddress',
+      'components.SavedShippingMethod',
+      'helpers.getUrlQuery',
+      'services.createPaymentGraphQl',
+      'stores.useCartStore',
+      'stores.useConfigStore',
+    ]);
+
+    this.SavedDeliveryAddress = SavedDeliveryAddress;
+    this.SavedShippingMethod = SavedShippingMethod;
     // Get the Amazon checkout sessionID.
     const amazonCheckoutSessionId = getUrlQuery('amazonCheckoutSessionId');
 
-    await this.getInitialConfig();
-    await this.getCart();
+    await configStore.getInitialConfig();
+    await this.getInitialConfigValues();
+    await cartStore.getCart();
 
     const paymentMethodsResponse = await this.getPaymentMethodsResponse();
-    const extensionAttributes = getPaymentExtensionAttributes();
     const configuration = {
       paymentMethodsResponse,
-      clientKey: this.getAdyenClientKey,
+      clientKey: await this.getAdyenClientKey,
       amount: {
-        value: this.cartGrandTotal,
-        currency: this.currencyCode,
+        value: cartStore.cartGrandTotal,
+        currency: configStore.currencyCode,
       },
-      locale: this.locale,
+      locale: configStore.locale,
       environment: getAdyenProductionMode() ? 'live' : 'test',
       analytics: {
         enabled: false,
@@ -122,14 +117,9 @@ export default {
       onSubmit: (state, component) => {
         this.state = 'loading';
 
-        const paymentMethod = this.getPaymentMethod(state, extensionAttributes);
-        const data = {
-          billingAddress: this.getSelectedBillingAddress,
-          paymentMethod,
-          email: this.customer.email,
-        };
+        const paymentMethod = this.getPaymentMethod(state);
 
-        createPayment(data)
+        createPaymentGraphQl(paymentMethod)
           .then(this.setOrderId)
           .then(getAdyenPaymentStatus)
           .then((response) => this.handlePaymentStatus(response, component))
@@ -156,9 +146,7 @@ export default {
     amazonPayComponent.submit();
   },
   methods: {
-    ...mapActions(useAdyenStore, ['getPaymentMethodsResponse']),
-    ...mapActions(useCartStore, ['getCart']),
-    ...mapActions(useConfigStore, ['getInitialConfig']),
+    ...mapActions(useAdyenStore, ['getInitialConfigValues', 'getPaymentMethodsResponse']),
 
     setOrderId(orderId) {
       this.orderId = orderId;
@@ -180,16 +168,15 @@ export default {
       }
     },
 
-    getPaymentMethod(state, extensionAttributes) {
-      const method = state.data.paymentMethod.type === 'scheme' ? 'adyen_cc' : 'adyen_hpp';
+    getPaymentMethod(state) {
+      const additionalDataKey = this.isAdyenVersion('8') ? 'adyen_additional_data_hpp' : 'adyen_additional_data';
+
       return {
-        method,
-        additional_data: {
+        code: this.isAdyenVersion('8') ? 'adyen_hpp' : 'adyen_amazonpay',
+        [additionalDataKey]: {
           brand_code: state.data.paymentMethod.type,
           stateData: JSON.stringify(state.data),
-          is_active_payment_token_enabler: !!state.data.storePaymentMethod,
         },
-        extension_attributes: extensionAttributes,
       };
     },
 
@@ -201,6 +188,14 @@ export default {
           'PresentToShopper',
         ];
         if (approvedCodes.includes(response.resultCode)) {
+          const [
+            getCartSectionNames,
+            refreshCustomerData,
+          ] = await loadFromCheckout([
+            'helpers.getCartSectionNames',
+            'services.refreshCustomerData',
+          ]);
+
           this.state = 'success';
           // Refresh the customers cart to clear any previous quote information before redirecting to success.
           await refreshCustomerData(getCartSectionNames());
@@ -218,7 +213,13 @@ export default {
       }
     },
 
-    redirectToSuccess() {
+    async redirectToSuccess() {
+      const [
+        getSuccessPageUrl,
+      ] = await loadFromCheckout([
+        'helpers.getSuccessPageUrl',
+      ]);
+
       window.location.href = getSuccessPageUrl();
     },
 
@@ -228,9 +229,14 @@ export default {
       this.errorMessage = message;
 
       // Reset the drop in component back to ready after 3 seconds.
-      setTimeout(() => {
+      setTimeout(async () => {
+        const [
+          stepsStore,
+        ] = await loadFromCheckout([
+          'stores.useStepsStore',
+        ]);
+
         // Redirect to the main payment page after displaying the error to allow the User to try a different method.
-        const stepsStore = useStepsStore();
         stepsStore.goToPayment();
         window.history.replaceState({}, '', '/checkout/#/payments');
       }, 3000);

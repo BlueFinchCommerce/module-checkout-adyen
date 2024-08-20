@@ -112,18 +112,10 @@ export default defineStore('adyenStore', {
         paymentStore.setHasVaultedMethods();
       }
 
-      // Map Google to use undefined if no merchantName.
-      const google = paymentMethodsResponse.paymentMethods.findIndex(({ type }) => (type === 'googlepay'));
-
-      if (google !== -1) {
-        const merchantName = paymentMethodsResponse.paymentMethods[google]?.configuration?.merchantName || undefined;
-        paymentMethodsResponse.paymentMethods[google].configuration.merchantName = merchantName;
-      }
-
       return paymentMethodsResponse;
     },
 
-    async goToAdyenAmazonReviw() {
+    async goToAdyenAmazonReview() {
       const [
         stepsStore,
       ] = await loadFromCheckout([
@@ -134,7 +126,7 @@ export default defineStore('adyenStore', {
         shippingActive: true,
         paymentActive: true,
       });
-      // this.$router.push('/adyen-amazon-review');
+      this.$router.push('/adyen-amazon-review');
     },
 
     getCachedResponse(request, cacheKey, args = {}) {

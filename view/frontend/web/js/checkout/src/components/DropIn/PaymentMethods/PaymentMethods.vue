@@ -200,7 +200,7 @@ export default {
             .then(getAdyenPaymentStatus)
             .then((response) => this.handlePaymentStatus(response, dropin))
             .catch((error) => {
-              this.displayError(dropin, error.message);
+              this.displayError(dropin, error.message).bind(this);
               throw Error(error);
             });
         } else {
@@ -322,7 +322,7 @@ export default {
 
     getPaymentMethod(state) {
       const paymentMethod = {
-        code: state.data.paymentMethod.type === 'scheme' ? 'adyen_cc' : `adyen_${state.data.paymentMethod.type}`,
+        code: state.data.paymentMethod.type === 'scheme' ? 'adyen_cc' : 'adyen_hpp',
       };
 
       if (state.data?.paymentMethod?.storedPaymentMethodId) {
@@ -339,7 +339,7 @@ export default {
           is_active_payment_token_enabler: !!state.data.storePaymentMethod,
         };
       } else {
-        paymentMethod.adyen_additional_data = {
+        paymentMethod.adyen_additional_data_hpp = {
           brand_code: state.data.paymentMethod.type,
           stateData,
         };
@@ -435,13 +435,13 @@ export default {
       ]);
 
       paymentStore.paymentEmitter.emit('adyenPaymentDisplayingError', { id: this.id, isDisplaying: true });
-      dropin.setStatus('error', {
+      dropin && dropin.setStatus('error', {
         message,
       });
 
       // Reset the drop in component back to ready after 3 seconds.
       setTimeout(() => {
-        dropin.setStatus('ready');
+        dropin && dropin.setStatus('ready');
         paymentStore.paymentEmitter.emit('adyenPaymentDisplayingError', { id: this.id, isDisplaying: false });
         paymentStore.paymentEmitter.emit('adyenPaymentLoading', { id: this.id, loading: false });
 
