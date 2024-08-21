@@ -90,7 +90,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useAdyenStore, ['adyenVaultEnabled', 'getAdyenClientKey']),
+    ...mapState(useAdyenStore, ['adyenVaultEnabled', 'getAdyenClientKey', 'isAdyenVersion', 'recurringConfiguration']),
   },
   watch: {
     selectedMethod: {
@@ -211,7 +211,9 @@ export default {
         card: {
           hasHolderName: false,
           holderNameRequired: false,
-          enableStoreDetails: customerStore.isLoggedIn && this.adyenVaultEnabled,
+          enableStoreDetails: customerStore.isLoggedIn && this.isAdyenVersion('8')
+            ? this.adyenVaultEnabled
+            : this.recurringConfiguration?.adyen_cc?.enabled === '1',
           hideCVC: false,
           name: 'Credit or debit card',
         },
@@ -335,7 +337,9 @@ export default {
         paymentMethod.adyen_additional_data_cc = {
           cc_type: state.data.paymentMethod.brand,
           stateData,
-          recurringProcessingModel: 'CardOnFile',
+          recurringProcessingModel: this.isAdyenVersion('8')
+            ? 'CardOnFile'
+            : this.recurringConfiguration?.adyen_cc?.recurringProcessingModel,
           is_active_payment_token_enabler: !!state.data.storePaymentMethod,
         };
       } else {

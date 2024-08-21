@@ -9,6 +9,7 @@
                 <item name="adyen_client_key_live" xsi:type="string">payment/adyen_abstract/client_key_live</item>
                 <item name="adyen_environment_mode" xsi:type="string">payment/adyen_abstract/demo_mode</item>
                 <item name="adyen_vault_enabled" xsi:type="string">payment/adyen_oneclick/active</item>
+                <item name="recurring_configuration" xsi:type="string">payment/adyen_abstract/recurring_configuration</item>
             </argument>
         </arguments>
     </type>

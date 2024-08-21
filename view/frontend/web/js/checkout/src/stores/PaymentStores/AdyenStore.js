@@ -12,6 +12,7 @@ export default defineStore('adyenStore', {
     paymentTypes: [],
     adyenEnvironmentMode: 'live',
     adyenVaultEnabled: false,
+    recurringConfiguration: {},
     keyLive: '',
     keyTest: '',
     version: '',
@@ -55,7 +56,7 @@ export default defineStore('adyenStore', {
           adyen_client_key_test
           adyen_version_number
         }
-      }`).then(this.handleInitialConfig);
+      }`).then(this.handleInitialConfig).then(this.getVaultConfig);
 
       await this.getCachedResponse(request, 'getInitialConfig');
     },
@@ -71,6 +72,34 @@ export default defineStore('adyenStore', {
           version: config.data.storeConfig.adyen_version_number,
         });
       }
+    },
+
+    async getVaultConfig() {
+      const [
+        graphQlRequest,
+      ] = await loadFromCheckout([
+        'services.graphQlRequest',
+      ]);
+
+      const config = this.isAdyenVersion('8')
+        ? 'adyen_vault_enabled'
+        : 'recurring_configuration';
+
+      return graphQlRequest(`{
+        storeConfig {
+          ${config}
+        }
+      }`).then(({ data: { storeConfig } }) => {
+        if (this.isAdyenVersion('8')) {
+          this.setData({
+            adyenVaultEnabled: storeConfig.adyen_vault_enabled,
+          });
+        } else {
+          this.setData({
+            recurringConfiguration: JSON.parse(storeConfig.recurring_configuration),
+          });
+        }
+      });
     },
 
     async getPaymentMethodsResponse() {
