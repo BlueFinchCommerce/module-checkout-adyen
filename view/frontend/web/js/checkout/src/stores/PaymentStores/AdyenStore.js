@@ -81,22 +81,22 @@ export default defineStore('adyenStore', {
         'services.graphQlRequest',
       ]);
 
-      const config = this.isAdyenVersion('8')
-        ? 'adyen_vault_enabled'
-        : 'recurring_configuration';
+      const config = this.isAdyenVersion('9')
+        ? 'recurring_configuration'
+        : 'adyen_vault_enabled';
 
       return graphQlRequest(`{
         storeConfig {
           ${config}
         }
       }`).then(({ data: { storeConfig } }) => {
-        if (this.isAdyenVersion('8')) {
+        if (this.isAdyenVersion('9')) {
           this.setData({
-            adyenVaultEnabled: storeConfig.adyen_vault_enabled,
+            recurringConfiguration: JSON.parse(storeConfig.recurring_configuration),
           });
         } else {
           this.setData({
-            recurringConfiguration: JSON.parse(storeConfig.recurring_configuration),
+            adyenVaultEnabled: storeConfig.adyen_vault_enabled,
           });
         }
       });

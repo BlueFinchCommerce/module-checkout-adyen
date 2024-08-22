@@ -228,10 +228,10 @@ export default {
               browserInfo: this.browserInfo,
             });
 
-            const additionalDataKey = this.isAdyenVersion('8') ? 'adyen_additional_data_hpp' : 'adyen_additional_data';
+            const additionalDataKey = this.isAdyenVersion('9') ? 'adyen_additional_data' : 'adyen_additional_data_hpp';
 
             const paymentMethod = {
-              code: this.isAdyenVersion('8') ? 'adyen_hpp' : 'adyen_applepay',
+              code: this.isAdyenVersion('9') ? 'adyen_applepay' : 'adyen_hpp',
               [additionalDataKey]: {
                 brand_code: 'applepay',
                 stateData,
