@@ -20,7 +20,7 @@
       <AdyenPaymentCard
         v-for="storedPaymentMethod in storedPaymentMethods"
         v-show="!isErrorDisplayed && paymentVisible"
-        :class="{'adyen-stored-payment-selected': storedPaymentSelected}"
+        :class="{ 'adyen-stored-payment-selected': storedPaymentSelected }"
         :key="storedPaymentMethod.id"
         :method="storedPaymentMethod"
       />

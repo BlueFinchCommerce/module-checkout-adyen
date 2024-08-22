@@ -46,9 +46,9 @@
 <script>
 // Stores
 import { mapActions, mapState } from 'pinia';
+import AdyenCheckout from '@adyen/adyen-web';
 import useAdyenStore from '../../stores/PaymentStores/AdyenStore';
 
-import AdyenCheckout from '@adyen/adyen-web';
 import '@adyen/adyen-web/dist/adyen.css';
 
 // Services
