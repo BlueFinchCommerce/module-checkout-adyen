@@ -90,7 +90,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useAdyenStore, ['adyenVaultEnabled', 'getAdyenClientKey']),
+    ...mapState(useAdyenStore, ['adyenVaultEnabled', 'getAdyenClientKey', 'isAdyenVersion', 'recurringConfiguration']),
   },
   watch: {
     selectedMethod: {
@@ -211,7 +211,9 @@ export default {
         card: {
           hasHolderName: false,
           holderNameRequired: false,
-          enableStoreDetails: customerStore.isLoggedIn && this.adyenVaultEnabled,
+          enableStoreDetails: customerStore.isLoggedIn && this.isAdyenVersion('9')
+            ? this.recurringConfiguration?.adyen_cc?.enabled === '1'
+            : this.adyenVaultEnabled,
           hideCVC: false,
           name: 'Credit or debit card',
         },
@@ -321,9 +323,15 @@ export default {
     },
 
     getPaymentMethod(state) {
-      const paymentMethod = {
-        code: state.data.paymentMethod.type === 'scheme' ? 'adyen_cc' : 'adyen_hpp',
-      };
+      const paymentMethod = {};
+
+      if (state.data.paymentMethod.type === 'scheme') {
+        paymentMethod.code = 'adyen_cc';
+      } else if (this.isAdyenVersion('9')) {
+        paymentMethod.code = `adyen_${state.data.paymentMethod.type}`;
+      } else {
+        paymentMethod.code = 'adyen_hpp';
+      }
 
       if (state.data?.paymentMethod?.storedPaymentMethodId) {
         state.data.storePaymentMethod = true;
@@ -335,11 +343,14 @@ export default {
         paymentMethod.adyen_additional_data_cc = {
           cc_type: state.data.paymentMethod.brand,
           stateData,
-          recurringProcessingModel: 'CardOnFile',
+          recurringProcessingModel: this.isAdyenVersion('9')
+            ? this.recurringConfiguration?.adyen_cc?.recurringProcessingModel
+            : 'CardOnFile',
           is_active_payment_token_enabler: !!state.data.storePaymentMethod,
         };
       } else {
-        paymentMethod.adyen_additional_data_hpp = {
+        const additionalDataKey = this.isAdyenVersion('9') ? 'adyen_additional_data' : 'adyen_additional_data_hpp';
+        paymentMethod[additionalDataKey] = {
           brand_code: state.data.paymentMethod.type,
           stateData,
         };

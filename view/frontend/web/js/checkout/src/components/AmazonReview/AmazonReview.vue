@@ -169,10 +169,10 @@ export default {
     },
 
     getPaymentMethod(state) {
-      const additionalDataKey = this.isAdyenVersion('8') ? 'adyen_additional_data_hpp' : 'adyen_additional_data';
+      const additionalDataKey = this.isAdyenVersion('9') ? 'adyen_additional_data' : 'adyen_additional_data_hpp';
 
       return {
-        code: this.isAdyenVersion('8') ? 'adyen_hpp' : 'adyen_amazonpay',
+        code: this.isAdyenVersion('9') ? 'adyen_amazonpay' : 'adyen_hpp',
         [additionalDataKey]: {
           brand_code: state.data.paymentMethod.type,
           stateData: JSON.stringify(state.data),
