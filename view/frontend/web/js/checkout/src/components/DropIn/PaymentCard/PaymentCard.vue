@@ -1,7 +1,7 @@
 <template>
   <button
     class="adyen-checkout__payment-method__header__title button"
-    :class="{'adyen-checkout__payment-method-disabled': !method.default}"
+    :class="{ 'adyen-checkout__payment-method-disabled': !method.default }"
     :aria-label="$t('paymentCard.storedPaymentLabel', { name: method.name, lastFour: method.lastFour })"
     type="button"
     :data-original-id="method.originalId"
