@@ -17,7 +17,8 @@
       v-if="storedPayments && storedPaymentCardsLocation !== ''"
       :to="storedPaymentCardsLocation"
     >
-      <AdyenPaymentCard
+      <component
+        :is="AdyenPaymentCard"
         v-for="storedPaymentMethod in storedPaymentMethods"
         v-show="!isErrorDisplayed && paymentVisible"
         :class="{ 'adyen-stored-payment-selected': storedPaymentSelected }"
@@ -53,10 +54,6 @@ import loadFromCheckout from '../../../helpers/loadFromCheckout';
 
 export default {
   name: 'AdyenPaymentMethods',
-
-  components: {
-    AdyenPaymentCard,
-  },
   props: {
     id: {
       type: String,
@@ -87,6 +84,7 @@ export default {
       PrivacyPolicy: null,
       Recaptcha: null,
       selectedMethod: null,
+      AdyenPaymentCard: null,
     };
   },
   computed: {
@@ -150,6 +148,8 @@ export default {
     await this.getInitialConfigValues();
     await cartStore.getCart();
 
+    this.AdyenPaymentCard = AdyenPaymentCard;
+    console.log(AdyenPaymentCard);
     this.Agreements = Agreements;
     this.PrivacyPolicy = PrivacyPolicy;
     this.Recaptcha = Recaptcha;
@@ -237,6 +237,8 @@ export default {
 
     // If we are on the stored payments compent (and some stored payments exist) then
     // modify the methods to show the payment cards rather that input radios.
+    console.log(this.storedPayments);
+    console.log(this.storedPaymentMethods);
     if (this.storedPayments && this.storedPaymentMethods.length) {
       // Created a mutation observer to handle when the drop in component is actually ready
       // because Adyen doesn't provide a useful callback to trigger this.
