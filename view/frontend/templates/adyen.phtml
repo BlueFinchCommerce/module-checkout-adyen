@@ -8,6 +8,7 @@
 $applePay = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/ApplePay/ApplePay.min.js');
 $googlePay = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/GooglePay/GooglePay.min.js');
 $dropIn = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/DropIn/DropIn.min.js');
+$vaulted = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/DropIn/VaultedMethods.min.js');
 $icons = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/FooterIcons/FooterIcons.min.js');
 $onCreate = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/callbacks/onCreate.min.js');
 $styles = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/styles.css');
@@ -17,6 +18,7 @@ $styles = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/sty
     window.geneCheckout = window.geneCheckout || {};
 
     window.geneCheckout.expressPaymentMethods = window.geneCheckout.expressPaymentMethods || {};
+    window.geneCheckout.additionalVaultedMethods = window.geneCheckout.additionalVaultedMethods || {};
     window.geneCheckout.paymentMethods = window.geneCheckout.paymentMethods || {};
     window.geneCheckout.footerPaymentIcons = window.geneCheckout.footerPaymentIcons || {};
     window.geneCheckout.callbacks = window.geneCheckout.callbacks || {};
@@ -24,6 +26,7 @@ $styles = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/sty
 
     window.geneCheckout.expressPaymentMethods.AdyenApplePay = "<?= $escaper->escapeJs($applePay) ?>";
     window.geneCheckout.expressPaymentMethods.AdyenGooglePay = "<?= $escaper->escapeJs($googlePay) ?>";
+    window.geneCheckout.additionalVaultedMethods.AdyenVaultedMethods = "<?= $escaper->escapeJs($vaulted) ?>";
     window.geneCheckout.paymentMethods.Adyen = "<?= $escaper->escapeJs($dropIn) ?>";
     window.geneCheckout.footerPaymentIcons.Adyen = "<?= $escaper->escapeJs($icons) ?>";
     window.geneCheckout.callbacks.onCreate.adyenOnCreate = "<?= $escaper->escapeJs($onCreate) ?>";

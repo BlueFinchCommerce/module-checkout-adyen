@@ -81,7 +81,7 @@ export default {
       risk: {
         enabled: false,
       },
-      clientKey: this.getAdyenClientKey,
+      clientKey: await this.getAdyenClientKey,
     };
     const checkout = await AdyenCheckout(configuration);
     const applePayComponent = checkout.create('applepay', applePayConfiguration);

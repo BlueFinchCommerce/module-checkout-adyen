@@ -237,8 +237,6 @@ export default {
 
     // If we are on the stored payments compent (and some stored payments exist) then
     // modify the methods to show the payment cards rather that input radios.
-    console.log(this.storedPayments);
-    console.log(this.storedPaymentMethods);
     if (this.storedPayments && this.storedPaymentMethods.length) {
       // Created a mutation observer to handle when the drop in component is actually ready
       // because Adyen doesn't provide a useful callback to trigger this.
