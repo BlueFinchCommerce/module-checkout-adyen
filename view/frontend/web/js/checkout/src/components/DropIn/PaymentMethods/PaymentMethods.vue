@@ -149,7 +149,7 @@ export default {
     await cartStore.getCart();
 
     this.AdyenPaymentCard = AdyenPaymentCard;
-    console.log(AdyenPaymentCard);
+
     this.Agreements = Agreements;
     this.PrivacyPolicy = PrivacyPolicy;
     this.Recaptcha = Recaptcha;
