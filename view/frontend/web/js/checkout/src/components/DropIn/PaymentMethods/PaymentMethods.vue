@@ -286,6 +286,12 @@ export default {
         this.selectedOriginalId = originalId;
       }
     });
+
+    paymentStore.paymentEmitter.on('paymentMethodSelected', ({ type }) => {
+      if (!type.includes('adyen')) {
+        this.checkout.dropinRef.closeActivePaymentMethod();
+      }
+    });
   },
   async beforeUnmount() {
     const [
@@ -473,6 +479,9 @@ export default {
         'stores.usePaymentStore',
       ]);
 
+      // Emit event on RVVUP selected
+      paymentStore.paymentEmitter.emit('paymentMethodSelected', { type: 'adyen' });
+
       paymentStore.selectPaymentMethod(this.id);
       setTimeout(this.updateAgreementLocation, 0);
     },
@@ -529,6 +538,7 @@ export default {
         });
       }, 0);
     },
+
     createStyledList(storedPayments, paymentMethodCount) {
       const styledList = document.createElement('div');
       styledList.classList.add('adyen-checkout__payment-methods-list-styled');
