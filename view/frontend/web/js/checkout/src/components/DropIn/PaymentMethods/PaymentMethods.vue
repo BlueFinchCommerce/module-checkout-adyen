@@ -211,9 +211,9 @@ export default {
         card: {
           hasHolderName: false,
           holderNameRequired: false,
-          enableStoreDetails: customerStore.isLoggedIn && this.isAdyenVersion('9')
+          enableStoreDetails: customerStore.isLoggedIn && (this.isAdyenVersion('9')
             ? this.recurringConfiguration?.adyen_cc?.enabled === '1'
-            : this.adyenVaultEnabled,
+            : this.adyenVaultEnabled),
           hideCVC: false,
           name: 'Credit or debit card',
         },
