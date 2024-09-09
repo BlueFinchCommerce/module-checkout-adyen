@@ -1,8 +1,9 @@
 <template>
   <template v-if="isAdyenAvailable">
     <div class="adyen-payment-icons">
-      <ul class="pay-with__column"
-          v-if="Object.keys(paymentTypes).length > 0">
+      <ul
+        class="pay-with__column"
+        v-if="Object.keys(paymentTypes).length > 0">
         <template v-for="(paymentType, index) in paymentTypes">
           <li
             v-if="paymentType.icon && !paymentType.icon.includes('klarna_account')"
