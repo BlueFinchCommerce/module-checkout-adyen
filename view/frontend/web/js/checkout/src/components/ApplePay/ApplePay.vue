@@ -14,6 +14,7 @@ import useAdyenStore from '../../stores/PaymentStores/AdyenStore';
 
 import '@adyen/adyen-web/dist/adyen.css';
 
+import clearCartAddresses from '../../helpers/clearCartAddresses';
 import getAdyenProductionMode from '../../helpers/getAdyenProductionMode';
 import loadFromCheckout from '../../helpers/loadFromCheckout';
 
@@ -153,6 +154,9 @@ export default {
         }),
         onClick: (resolve, reject) => this.onClick(resolve, reject, applePayMethod.type),
         onSubmit: () => {},
+        onError: async () => {
+          clearCartAddresses();
+        },
       };
     },
 
