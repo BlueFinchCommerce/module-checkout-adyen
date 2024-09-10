@@ -1,4 +1,4 @@
-@import '../../../../../../../../../module-better-checkout/view/frontend/web/js/checkout/src/styles/global/_breakpoints';
+@import '../../styles/breakpoints';
 
 .adyen-checkout__input {
   background: var(--adyen-checkout-input__background-color, var(--input__background-color));
@@ -52,7 +52,7 @@
   }
 }
 
-.adyen-checkout__button {
+button.adyen-checkout__button {
   background: var(--button-adyen-pay__background-color);
   border-radius: var(--button-adyen-pay__border-radius);
   box-shadow: var(--button-primary__border-box-shadow);
@@ -111,7 +111,7 @@
   }
 
   &__details {
-    padding: 0;
+    padding: 0 !important;
   }
 }
 

@@ -1,10 +1,9 @@
-@import '../../../../../../../../../module-better-checkout/view/frontend/web/js/checkout/src/styles/global/_breakpoints';
+@import '../../styles/breakpoints';
 
 .payment-page {
   padding: 0 var(--indent__base--mobile);
 
   .payment-form {
-    background: var(--color__primary-grey6);
     margin-top: var(--indent__base);
   }
 }

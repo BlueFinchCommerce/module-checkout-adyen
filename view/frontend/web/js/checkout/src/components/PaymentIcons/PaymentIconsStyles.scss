@@ -1,12 +1,12 @@
 @import '../../styles/breakpoints';
 
-.adyen-footer-icons {
+.adyen-payment-icons {
   width: var(--footer-icons-width-mobile, auto);
   height: var(--footer-icons-min-height, 25px); //prevent cls jump
 
   ul {
     padding: 0;
-    margin: var(--footer-icons-margin-mobile, var(--indent__s) 0);
+    margin: 0;
     display: flex;
     flex-wrap: wrap;
     align-items: var(--footer-icons-align-items, center);
@@ -27,7 +27,7 @@
 }
 
 @media (min-width: $screen__m) {
-  .adyen-footer-icons {
+  .adyen-payment-icons {
     width: var(--footer-icons-width-desktop, auto);
 
     ul {
