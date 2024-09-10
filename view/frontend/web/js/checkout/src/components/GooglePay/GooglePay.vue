@@ -15,6 +15,7 @@ import { mapActions, mapState } from 'pinia';
 import AdyenCheckout from '@adyen/adyen-web';
 import useAdyenStore from '../../stores/PaymentStores/AdyenStore';
 
+import clearCartAddresses from '../../helpers/clearCartAddresses';
 import getAdyenProductionMode from '../../helpers/getAdyenProductionMode';
 
 import getAdyenPaymentStatus from '../../services/getAdyenPaymentStatus';
@@ -192,7 +193,10 @@ export default {
         onAuthorized: this.handeOnAuthorized,
         onClick: (resolve, reject) => this.onClick(resolve, reject, googlePayConfig.type),
         onSubmit: () => {},
-        onError: () => { this.setLoadingState(false); },
+        onError: async () => {
+          clearCartAddresses();
+          this.setLoadingState(false);
+        },
       };
     },
 
