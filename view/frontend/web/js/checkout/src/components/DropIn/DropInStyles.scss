@@ -1,4 +1,4 @@
-$screen__m: 768px;
+@import '../../styles/breakpoints';
 
 .adyen-checkout__input {
   background: var(--adyen-checkout-input__background-color, var(--input__background-color));

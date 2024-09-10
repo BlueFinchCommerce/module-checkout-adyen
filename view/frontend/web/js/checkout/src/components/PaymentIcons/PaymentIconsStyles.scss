@@ -1,4 +1,4 @@
-$screen__m: 768px;
+@import '../../styles/breakpoints';
 
 .adyen-payment-icons {
   width: var(--footer-icons-width-mobile, auto);

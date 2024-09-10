@@ -1,4 +1,4 @@
-$screen__m: 768px;
+@import '../../styles/breakpoints';
 
 .payment-page {
   padding: 0 var(--indent__base--mobile);
