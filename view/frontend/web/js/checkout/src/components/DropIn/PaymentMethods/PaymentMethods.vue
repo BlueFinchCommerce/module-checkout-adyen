@@ -90,33 +90,6 @@ export default {
   computed: {
     ...mapState(useAdyenStore, ['adyenVaultEnabled', 'getAdyenClientKey', 'isAdyenVersion', 'recurringConfiguration']),
   },
-  watch: {
-    selectedMethod: {
-      handler(newVal) {
-        if (newVal !== null && this.checkout !== undefined) {
-          // Only do this for example if a stored payment is selected and new card is open.
-          if (this.id !== newVal && this.checkout.dropinRef) {
-            this.checkout.dropinRef.closeActivePaymentMethod();
-          }
-
-          // Set the stored payment radio field state depending on if it matches
-          // the current ID.
-          this.storedPaymentSelected = this.id === newVal;
-
-          // If the selected method isn't a stored method then reset all stored method selection.
-          if (newVal !== 'adyen-dropin-container-stored') {
-            this.storedPaymentMethods = this.storedPaymentMethods.map((storedMethod) => {
-              const updatedMethod = storedMethod;
-              updatedMethod.default = false;
-              return updatedMethod;
-            });
-          }
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-  },
   async created() {
     const [
       Agreements,
@@ -166,6 +139,30 @@ export default {
       return;
     }
 
+    paymentStore.$subscribe((mutation) => {
+      if (mutation?.payload?.selectedMethod) {
+        if (mutation.payload.selectedMethod !== null && this.checkout !== undefined) {
+          // Only do this for example if a stored payment is selected and new card is open.
+          if (this.id !== mutation.payload.selectedMethod && this.checkout.dropinRef) {
+            this.checkout.dropinRef.closeActivePaymentMethod();
+          }
+
+          // Set the stored payment radio field state depending on if it matches
+          // the current ID.
+          this.storedPaymentSelected = this.id === mutation.payload.selectedMethod;
+
+          // If the selected method isn't a stored method then reset all stored method selection.
+          if (mutation.payload.selectedMethod !== 'adyen-dropin-container-stored') {
+            this.storedPaymentMethods = this.storedPaymentMethods.map((storedMethod) => {
+              const updatedMethod = storedMethod;
+              updatedMethod.default = false;
+              return updatedMethod;
+            });
+          }
+        }
+      }
+    });
+
     this.storedPaymentSelected = true;
 
     const extensionAttributes = getPaymentExtensionAttributes();
@@ -194,6 +191,7 @@ export default {
           const paymentMethod = this.getPaymentMethod(state, extensionAttributes);
 
           paymentStore.paymentEmitter.emit('adyenPaymentLoading', { id: this.id, loading: true });
+          paymentStore.paymentEmitter.emit('paymentProcessing', true);
 
           createPaymentGraphQl(paymentMethod)
             .then(this.setOrderId)
@@ -263,6 +261,10 @@ export default {
         this.isErrorDisplayed = isDisplaying;
       }
       this.hideStoredPaymentRadio = isDisplaying;
+    });
+
+    paymentStore.paymentEmitter.on('paymentProcessing', (processing) => {
+      processing ? this.checkout.setStatus('loading') : this.checkout.setStatus('ready');
     });
 
     paymentStore.paymentEmitter.on('adyenPaymentLoading', ({ id, loading }) => {
@@ -452,6 +454,7 @@ export default {
       ]);
 
       paymentStore.paymentEmitter.emit('adyenPaymentDisplayingError', { id: this.id, isDisplaying: true });
+      paymentStore.paymentEmitter.emit('paymentProcessing', false);
       dropin && dropin.setStatus('error', {
         message,
       });
