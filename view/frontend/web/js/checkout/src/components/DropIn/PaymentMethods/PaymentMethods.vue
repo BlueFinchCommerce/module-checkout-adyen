@@ -475,7 +475,7 @@ export default {
       }, 3000);
     },
 
-    async onSelect() {
+    async onSelect(config) {
       const [
         paymentStore,
       ] = await loadFromCheckout([
@@ -483,7 +483,7 @@ export default {
       ]);
 
       // Emit event on RVVUP selected
-      paymentStore.paymentEmitter.emit('paymentMethodSelected', { type: 'adyen' });
+      paymentStore.paymentEmitter.emit('paymentMethodSelected', { type: `adyen_${config.props.type}` });
 
       paymentStore.selectPaymentMethod(this.id);
       setTimeout(this.updateAgreementLocation, 0);
