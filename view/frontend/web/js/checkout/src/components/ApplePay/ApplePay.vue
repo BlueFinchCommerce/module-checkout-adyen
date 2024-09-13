@@ -317,6 +317,7 @@ export default {
       const applePayShippingContactUpdate = {
         newShippingMethods,
         newTotal: {
+          type: 'final',
           label: this.applePayTotal,
           amount: parseFloat(cartStore.cartGrandTotal / 100).toFixed(2),
         },
@@ -362,6 +363,7 @@ export default {
       await shippingMethodsStore.submitShippingInfo(selectedShipping.carrier_code, selectedShipping.method_code);
       const applePayShippingContactUpdate = {
         newTotal: {
+          type: 'final',
           label: this.applePayTotal,
           amount: parseFloat(cartStore.cartGrandTotal / 100).toFixed(2),
         },
@@ -396,7 +398,7 @@ export default {
         {
           label: shippingMethod.method_title,
           detail: shippingMethod.carrier_title || '',
-          amount: shippingMethod.amount.toString(),
+          amount: shippingMethod.amount.value.toString(),
           identifier: shippingMethod.method_code,
           carrierCode: shippingMethod.carrier_code,
         }
