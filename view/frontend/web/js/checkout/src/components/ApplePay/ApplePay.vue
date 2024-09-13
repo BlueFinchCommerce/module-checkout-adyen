@@ -286,18 +286,72 @@ export default {
 
       this.address = address;
 
-      const result = await getShippingMethods(address);
-      const methods = result.shipping_addresses[0].available_shipping_methods;
+      try {
+        const result = await getShippingMethods(address);
 
-      const filteredMethods = methods.filter(({ method_code: methodCode }) => (
-        methodCode !== 'nominated_delivery'
-      ));
+        const methods = result.shipping_addresses[0].available_shipping_methods;
 
-      // If there are no shipping methods available show an error.
-      if (!filteredMethods.length) {
+        const filteredMethods = methods.filter(({ method_code: methodCode }) => (
+          methodCode !== 'nominated_delivery'
+        ));
+
+        // If there are no shipping methods available show an error.
+        if (!filteredMethods.length) {
+          const errors = {
+            errors: [
+              new window.ApplePayError('addressUnserviceable', 'postalAddress', this.applePayNoShippingMethods),
+            ],
+            newTotal: {
+              label: this.applePayTotal,
+              amount: '0.00',
+              type: 'pending',
+            },
+          };
+          resolve(errors);
+          return;
+        }
+
+        // Set the shipping method back to the first available method.
+        const selectedShipping = filteredMethods[0];
+
+        await shippingMethodsStore.submitShippingInfo(selectedShipping.carrier_code, selectedShipping.method_code);
+        const newShippingMethods = this.mapShippingMethods(filteredMethods);
+        const applePayShippingContactUpdate = {
+          newShippingMethods,
+          newTotal: {
+            type: 'final',
+            label: this.applePayTotal,
+            amount: parseFloat(cartStore.cartGrandTotal / 100).toFixed(2),
+          },
+          newLineItems: [
+            {
+              type: 'final',
+              label: 'Subtotal',
+              amount: cartStore.cart.prices.subtotal_including_tax.value.toString(),
+            },
+            {
+              type: 'final',
+              label: 'Shipping',
+              amount: selectedShipping.amount.value.toString(),
+            },
+          ],
+        };
+
+        // Add discount price if available.
+        if (cartStore.cartDiscountTotal) {
+          applePayShippingContactUpdate.newLineItems.push({
+            type: 'final',
+            label: 'Discount',
+            amount: cartStore.cartDiscountTotal.toString(),
+          });
+        }
+
+        resolve(applePayShippingContactUpdate);
+      } catch (error) {
+        const message = error.message || this.applePayNoShippingMethods;
         const errors = {
           errors: [
-            new window.ApplePayError('addressUnserviceable', 'postalAddress', this.applePayNoShippingMethods),
+            new window.ApplePayError('addressUnserviceable', 'postalAddress', message),
           ],
           newTotal: {
             label: this.applePayTotal,
@@ -306,45 +360,7 @@ export default {
           },
         };
         resolve(errors);
-        return;
       }
-
-      // Set the shipping method back to the first available method.
-      const selectedShipping = filteredMethods[0];
-
-      await shippingMethodsStore.submitShippingInfo(selectedShipping.carrier_code, selectedShipping.method_code);
-      const newShippingMethods = this.mapShippingMethods(filteredMethods);
-      const applePayShippingContactUpdate = {
-        newShippingMethods,
-        newTotal: {
-          type: 'final',
-          label: this.applePayTotal,
-          amount: parseFloat(cartStore.cartGrandTotal / 100).toFixed(2),
-        },
-        newLineItems: [
-          {
-            type: 'final',
-            label: 'Subtotal',
-            amount: cartStore.cart.prices.subtotal_including_tax.value.toString(),
-          },
-          {
-            type: 'final',
-            label: 'Shipping',
-            amount: selectedShipping.amount.value.toString(),
-          },
-        ],
-      };
-
-      // Add discount price if available.
-      if (cartStore.cartDiscountTotal) {
-        applePayShippingContactUpdate.newLineItems.push({
-          type: 'final',
-          label: 'Discount',
-          amount: cartStore.cartDiscountTotal.toString(),
-        });
-      }
-
-      resolve(applePayShippingContactUpdate);
     },
 
     async onShippingMethodSelect(resolve, reject, data) {
