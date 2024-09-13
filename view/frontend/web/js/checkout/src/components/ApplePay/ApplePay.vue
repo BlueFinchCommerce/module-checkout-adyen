@@ -144,6 +144,8 @@ export default {
           merchantName: applePayMethod.configuration.merchantName,
           merchantId: applePayMethod.configuration.merchantId,
         },
+        supportedNetworks: this.mapCardBrands(applePayMethod.brands),
+        merchantCapabilities: ['supports3DS'],
         requiredShippingContactFields,
         requiredBillingContactFields: ['postalAddress', 'name'],
         onAuthorized: this.onAuthorized.bind(this),
@@ -445,6 +447,18 @@ export default {
           ...(regionId ? { region_id: regionId } : {}),
         },
       };
+    },
+
+    mapCardBrands(brands) {
+      return brands.map((brand) => {
+        switch (brand) {
+          case 'mc':
+            return 'masterCard';
+
+          default:
+            return brand;
+        }
+      });
     },
   },
 };
