@@ -1,5 +1,5 @@
 <template>
-  <template v-if="!storedPayments || storedPaymentMethods.length">
+  <template v-if="!storedPayments || storedPaymentMethods.length > 0">
     <teleport
       v-if="agreementLocation !== ''"
       :to="agreementLocation"
