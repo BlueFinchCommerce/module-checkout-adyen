@@ -239,20 +239,25 @@ export default {
       // Created a mutation observer to handle when the drop in component is actually ready
       // because Adyen doesn't provide a useful callback to trigger this.
       const target = document.getElementById('adyen-dropin-container-new');
-      const config = { childList: true, subtree: true };
-      const callback = (mutationList, observer) => {
-        // Check that the newly added element has the class 'ready' on it and when it does trigger the modifications
-        // and disconnect the observer.
-        const isReady = mutationList.some((mutation) => (
-          mutation.target.classList.contains('adyen-checkout__dropin--ready')
-        ));
-        if (isReady) {
-          this.modifyStoredPayments();
-          observer.disconnect();
-        }
-      };
-      const observer = new MutationObserver(callback);
-      observer.observe(target, config);
+
+      if (target.querySelector('.adyen-checkout__dropin--ready')) {
+        this.modifyStoredPayments();
+      } else {
+        const config = { childList: true, subtree: true };
+        const callback = (mutationList, observer) => {
+          // Check that the newly added element has the class 'ready' on it and when it does trigger the modifications
+          // and disconnect the observer.
+          const isReady = mutationList.some((mutation) => (
+            mutation.target.classList.contains('adyen-checkout__dropin--ready')
+          ));
+          if (isReady) {
+            this.modifyStoredPayments();
+            observer.disconnect();
+          }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(target, config);
+      }
     }
 
     // If an error is displaying we can hide the payment methods.
