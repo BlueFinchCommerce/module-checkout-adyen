@@ -12,6 +12,7 @@ $vaulted = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/co
 $icons = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/FooterIcons/FooterIcons.min.js');
 $paymentIcons = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/PaymentIcons/PaymentIcons.min.js');
 $onCreate = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/callbacks/onCreate.min.js');
+$onLogin = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/callbacks/onLogin.min.js');
 $styles = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/styles.css');
 ?>
 
@@ -25,6 +26,7 @@ $styles = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/sty
   window.geneCheckout.paymentIcons = window.geneCheckout.paymentIcons || {};
   window.geneCheckout.callbacks = window.geneCheckout.callbacks || {};
   window.geneCheckout.callbacks.onCreate = window.geneCheckout.callbacks.onCreate || {};
+  window.geneCheckout.callbacks.onLogin = window.geneCheckout.callbacks.onLogin || {};
 
   window.geneCheckout.expressPaymentMethods.AdyenApplePay = "<?= $escaper->escapeJs($applePay) ?>";
   window.geneCheckout.expressPaymentMethods.AdyenGooglePay = "<?= $escaper->escapeJs($googlePay) ?>";
@@ -33,6 +35,7 @@ $styles = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/sty
   window.geneCheckout.footerPaymentIcons.AdyenFooterIcons = "<?= $escaper->escapeJs($icons) ?>";
   window.geneCheckout.paymentIcons.AdyenIcons = "<?= $escaper->escapeJs($paymentIcons) ?>";
   window.geneCheckout.callbacks.onCreate.adyenOnCreate = "<?= $escaper->escapeJs($onCreate) ?>";
+  window.geneCheckout.callbacks.onLogin.adyenOnLogin = "<?= $escaper->escapeJs($onLogin) ?>";
 </script>
 
 <link rel="stylesheet" href="<?= $escaper->escapeHtmlAttr($styles) ?>" />
