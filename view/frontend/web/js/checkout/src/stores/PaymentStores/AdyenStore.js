@@ -25,7 +25,7 @@ export default defineStore('adyenStore', {
         'stores.usePaymentStore',
       ]);
       const { availableMethods } = paymentStore;
-      return availableMethods.some(({ code }) => code.includes('adyen'));
+      return Array.isArray(availableMethods) && availableMethods.some(({ code }) => code.includes('adyen'));
     },
     getAdyenClientKey: async (state) => (
       await getAdyenProductionMode() ? state.keyLive : state.keyTest
