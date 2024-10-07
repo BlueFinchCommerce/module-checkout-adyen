@@ -21,8 +21,8 @@
         :is="AdyenPaymentCard"
         v-for="storedPaymentMethod in storedPaymentMethods"
         v-show="!isErrorDisplayed && paymentVisible"
-        :class="{ 'adyen-stored-payment-selected': storedPaymentSelected }"
         :key="storedPaymentMethod.id"
+        :class="{ 'adyen-stored-payment-selected': storedPaymentSelected }"
         :method="storedPaymentMethod"
       />
     </teleport>
@@ -435,13 +435,16 @@ export default {
       if (state.name === 'CANCEL') {
         const request = {
           orderId: this.orderId,
-          cancelled: true,
+          details: {
+            cancelled: true,
+          },
         };
         this.handleOnCancel(request, dropin);
       } else {
         this.displayError(dropin);
       }
     },
+
     async handleOnCancel(request, dropin) {
       try {
         await getAdyenPaymentDetails(JSON.stringify(request));
