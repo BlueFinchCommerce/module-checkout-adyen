@@ -27,5 +27,11 @@ export default async (payload) => {
   };
 
   return graphQlRequest(request, variables)
-    .then((response) => response.data.adyenPaymentDetails);
+    .then((response) => {
+      if (response.errors) {
+        throw new Error(response.errors[0].message);
+      }
+
+      return response.data.adyenPaymentDetails;
+    });
 };
