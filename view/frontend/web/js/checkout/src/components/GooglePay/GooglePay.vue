@@ -18,6 +18,7 @@ import useAdyenStore from '../../stores/PaymentStores/AdyenStore';
 import clearCartAddresses from '../../helpers/clearCartAddresses';
 import getAdyenProductionMode from '../../helpers/getAdyenProductionMode';
 
+import getAdyenPaymentDetails from '../../services/getAdyenPaymentDetails';
 import getAdyenPaymentStatus from '../../services/getAdyenPaymentStatus';
 
 import '@adyen/adyen-web/dist/adyen.css';
@@ -37,7 +38,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useAdyenStore, ['isAdyenVersion']),
+    ...mapState(useAdyenStore, ['getAdyenClientKey', 'isAdyenVersion']),
   },
   async created() {
     const [
@@ -79,11 +80,13 @@ export default {
 
     const configuration = {
       paymentMethodsResponse,
+      clientKey: await this.getAdyenClientKey,
       locale: configStore.locale,
       environment: getAdyenProductionMode() ? 'LIVE' : 'TEST',
       analytics: {
         enabled: false,
       },
+      onAdditionalDetails: this.onAdditionalDetails,
     };
 
     this.checkout = await AdyenCheckout(configuration);
@@ -426,11 +429,8 @@ export default {
           window.location.href = getSuccessPageUrl();
         } else {
           this.setLoadingState(false);
-          this.setErrorMessage(response.message);
         }
       } else if (response.action) {
-        this.setErrorMessage(response.message);
-
         // If the action is 3DS related then add a class globally so we can display as popup.
         if (response.action.type === 'threeDS2') {
           document.body.classList.add('gene-checkout-threeds-opened');
@@ -442,6 +442,21 @@ export default {
 
         this.threeDSVisible = true;
         this.checkout.createFromAction(response.action, threeDSConfiguration).mount('#adyen-threeds-container');
+      }
+    },
+
+    async onAdditionalDetails(state, component) {
+      try {
+        document.body.classList.remove('gene-checkout-threeds-opened');
+        const request = state.data ? state.data : {};
+        request.orderId = this.orderId;
+        const response = await getAdyenPaymentDetails(JSON.stringify(request));
+        await this.handleAdyenResponse(response, component);
+      } catch (error) {
+        // If the getAdyenPaymentDetails call errors we need to catch it.
+        const { message } = error;
+        this.setLoadingState(false);
+        this.setErrorMessage(message);
       }
     },
 
