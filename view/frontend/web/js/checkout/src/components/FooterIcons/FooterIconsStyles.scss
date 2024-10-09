@@ -2,7 +2,6 @@
 
 .adyen-footer-icons {
   width: var(--footer-icons-width-mobile, auto);
-  height: var(--footer-icons-min-height, 25px); //prevent cls jump
 
   ul {
     padding: 0;
@@ -20,7 +19,7 @@
       height: 100%;
 
       img {
-        height: 100%;
+        height: var(--footer-icons-min-height, 25px); //prevent cls jump
       }
     }
   }
