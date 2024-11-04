@@ -40,14 +40,14 @@ export default defineStore('adyenStore', {
     setData(data) {
       this.$patch(data);
     },
-
+    
     async getInitialConfigValues() {
       const [
         graphQlRequest,
       ] = await loadFromCheckout([
         'services.graphQlRequest',
       ]);
-
+      
       const request = async () => graphQlRequest(`{
         storeConfig {
           adyen_environment_mode
@@ -57,34 +57,43 @@ export default defineStore('adyenStore', {
           adyen_version_number
         }
       }`).then(this.handleInitialConfig).then(this.getVaultConfig);
-
+      
       await this.getCachedResponse(request, 'getInitialConfig');
     },
-
-    handleInitialConfig(config) {
+    
+    async handleInitialConfig(config) {
+      const [
+        paymentStore,
+      ] = await loadFromCheckout([
+        'stores.usePaymentStore',
+      ]);
+      const {availableMethods} = paymentStore;
+      const vaultActive = this.isAdyenVersion('9') ?availableMethods.some(({ code }) => code.includes('adyen_cc_vault'))
+        : config.data.storeConfig.adyen_vault_enabled;
+      
       if (config?.data?.storeConfig) {
         this.setData({
           // Adyen's modes are '0' = live, '1' = test.
           adyenEnvironmentMode: config.data.storeConfig.adyen_environment_mode === '0' ? 'live' : 'test',
-          adyenVaultEnabled: config.data.storeConfig.adyen_vault_enabled,
+          adyenVaultEnabled: vaultActive,
           keyLive: config.data.storeConfig.adyen_client_key_live,
           keyTest: config.data.storeConfig.adyen_client_key_test,
           version: config.data.storeConfig.adyen_version_number,
         });
       }
     },
-
+    
     async getVaultConfig() {
       const [
         graphQlRequest,
       ] = await loadFromCheckout([
         'services.graphQlRequest',
       ]);
-
+      
       const config = this.isAdyenVersion('9')
         ? 'recurring_configuration'
         : 'adyen_vault_enabled';
-
+      
       return graphQlRequest(`{
         storeConfig {
           ${config}
@@ -101,14 +110,14 @@ export default defineStore('adyenStore', {
         }
       });
     },
-
+    
     async getPaymentMethodsResponse() {
       const request = async () => getAdyenPaymentMethods();
       const {
         paymentMethodsExtraDetails,
         paymentMethodsResponse,
       } = await this.getCachedResponse(request, 'getAdyenPaymentMethods');
-
+      
       // Store the payment methods and icons.
       !this.paymentTypes.length && paymentMethodsResponse.paymentMethods.forEach((method) => {
         const { paymentTypes } = this;
@@ -125,25 +134,25 @@ export default defineStore('adyenStore', {
             icon: paymentMethodsExtraDetails[method.type].icon.url,
           });
         }
-
+        
         this.setData({
           paymentTypes,
         });
       });
-
+      
       if (paymentMethodsResponse.storedPaymentMethods) {
         const [
           paymentStore,
         ] = await loadFromCheckout([
           'stores.usePaymentStore',
         ]);
-
+        
         paymentStore.setHasVaultedMethods();
       }
-
+      
       return paymentMethodsResponse;
     },
-
+    
     async goToAdyenAmazonReview() {
       const [
         stepsStore,
@@ -157,12 +166,12 @@ export default defineStore('adyenStore', {
       });
       this.$router.push('/adyen-amazon-review');
     },
-
+    
     getCachedResponse(request, cacheKey, args = {}) {
       if (typeof this.$state.cache[cacheKey] !== 'undefined') {
         return this.$state.cache[cacheKey];
       }
-
+      
       const data = request(args);
       this.$patch({
         cache: {
@@ -171,11 +180,11 @@ export default defineStore('adyenStore', {
       });
       return data;
     },
-
+    
     clearPaymentReponseCache() {
       this.clearCaches(['getAdyenPaymentMethods']);
     },
-
+    
     clearCaches(cacheKeys) {
       if (cacheKeys.length) {
         cacheKeys.forEach((cacheKey) => {
