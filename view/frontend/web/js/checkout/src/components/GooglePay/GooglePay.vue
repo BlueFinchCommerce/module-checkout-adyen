@@ -200,6 +200,10 @@ export default {
           clearCartAddresses();
           this.setLoadingState(false);
         },
+        onCancel: async () => {
+          clearCartAddresses();
+          this.setLoadingState(false);
+        },
       };
     },
 

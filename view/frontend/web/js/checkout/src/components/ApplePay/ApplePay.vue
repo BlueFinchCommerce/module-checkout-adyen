@@ -159,6 +159,9 @@ export default {
         onError: async () => {
           clearCartAddresses();
         },
+        onCancel: async () => {
+          clearCartAddresses();
+        },
       };
     },
 

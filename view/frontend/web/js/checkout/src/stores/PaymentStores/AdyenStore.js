@@ -61,12 +61,22 @@ export default defineStore('adyenStore', {
       await this.getCachedResponse(request, 'getInitialConfig');
     },
 
-    handleInitialConfig(config) {
+    async handleInitialConfig(config) {
+      const [
+        paymentStore,
+      ] = await loadFromCheckout([
+        'stores.usePaymentStore',
+      ]);
+      const { availableMethods } = paymentStore;
+      const vaultActive = this.isAdyenVersion('9')
+        ? availableMethods.some(({ code }) => code.includes('adyen_cc_vault'))
+        : config.data.storeConfig.adyen_vault_enabled;
+
       if (config?.data?.storeConfig) {
         this.setData({
           // Adyen's modes are '0' = live, '1' = test.
           adyenEnvironmentMode: config.data.storeConfig.adyen_environment_mode === '0' ? 'live' : 'test',
-          adyenVaultEnabled: config.data.storeConfig.adyen_vault_enabled,
+          adyenVaultEnabled: vaultActive,
           keyLive: config.data.storeConfig.adyen_client_key_live,
           keyTest: config.data.storeConfig.adyen_client_key_test,
           version: config.data.storeConfig.adyen_version_number,
