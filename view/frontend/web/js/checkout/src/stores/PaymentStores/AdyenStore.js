@@ -113,11 +113,10 @@ export default defineStore('adyenStore', {
     },
 
     async getPaymentMethodsResponse() {
-      const request = async () => getAdyenPaymentMethods();
       const {
         paymentMethodsExtraDetails,
         paymentMethodsResponse,
-      } = await this.getCachedResponse(request, 'getAdyenPaymentMethods');
+      } = await getAdyenPaymentMethods();
 
       // Store the payment methods and icons.
       !this.paymentTypes.length && paymentMethodsResponse.paymentMethods.forEach((method) => {
