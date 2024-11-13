@@ -147,6 +147,7 @@ export default {
       } catch (error) {
         // If the getAdyenPaymentDetails call errors we need to catch it.
         this.setLoadingState(false);
+        clearCartAddresses();
         const message = error.response?.data?.message;
         this.setErrorMessage(message);
       }
@@ -432,6 +433,7 @@ export default {
           await refreshCustomerData(getCartSectionNames());
           window.location.href = getSuccessPageUrl();
         } else {
+          clearCartAddresses();
           this.setLoadingState(false);
         }
       } else if (response.action) {
@@ -442,6 +444,12 @@ export default {
 
         const threeDSConfiguration = {
           challengeWindowSize: '05',
+          onError: async (error) => {
+            this.setLoadingState(false);
+            document.body.classList.remove('gene-checkout-threeds-opened');
+            clearCartAddresses();
+            this.setErrorMessage(error.message);
+          },
         };
 
         this.threeDSVisible = true;
