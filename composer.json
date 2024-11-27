@@ -11,7 +11,8 @@
     }
   },
   "require": {
-    "magento/framework": "*"
+    "magento/framework": "*",
+    "gene/module-better-checkout": "^1.0"
   },
   "require-dev": {
       "bitexpert/phpstan-magento": "^0.27",
