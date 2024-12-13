@@ -56,7 +56,7 @@ export default defineStore('adyenStore', {
           adyen_client_key_test
           adyen_version_number
         }
-      }`, {}, {}, 'BetterCheckoutStoreConfig').then(this.handleInitialConfig).then(this.getVaultConfig);
+      }`, {}, {}, 'BetterCheckoutStoreConfigAdyen').then(this.handleInitialConfig).then(this.getVaultConfig);
 
       await this.getCachedResponse(request, 'getInitialConfig');
     },
