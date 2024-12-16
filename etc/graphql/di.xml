@@ -13,13 +13,4 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="BetterCheckoutSessionPlugin" type="Gene\BetterCheckout\Plugin\DisableSession">
-        <arguments>
-            <argument name="operationNames" xsi:type="array">
-                <item name="adyenPaymentDetails" xsi:type="string">BetterCheckoutAdyenPaymentDetails</item>
-                <item name="adyenPaymentStatus" xsi:type="string">BetterCheckoutAdyenPaymentStatus</item>
-                <item name="storeConfigAdyen" xsi:type="string">BetterCheckoutStoreConfigAdyen</item>
-            </argument>
-        </arguments>
-    </virtualType>
 </config>
