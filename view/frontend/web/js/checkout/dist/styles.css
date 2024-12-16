@@ -1,3 +1,17 @@
+#adyen-apple-pay {
+  line-height: var(--button__line-height);
+}
+#adyen-apple-pay.text-loading {
+  border-radius: var(--button__text-placeholder-bg-radius);
+  height: var(--braintree-express-button-height, 48px);
+}
+#adyen-apple-pay > button {
+  border-radius: var(--button__border-radius);
+  height: var(--adyen-express-button-height, 48px);
+  overflow: hidden;
+  width: 100%;
+}
+
 .adyen-checkout__input {
   background: var(--adyen-checkout-input__background-color, var(--input__background-color));
   border-radius: var(--input__border-radius);
@@ -183,20 +197,6 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
     background: transparent;
   }
 }
-#adyen-apple-pay {
-  line-height: var(--button__line-height);
-}
-#adyen-apple-pay.text-loading {
-  border-radius: var(--button__text-placeholder-bg-radius);
-  height: var(--braintree-express-button-height, 48px);
-}
-#adyen-apple-pay > button {
-  border-radius: var(--button__border-radius);
-  height: var(--adyen-express-button-height, 48px);
-  overflow: hidden;
-  width: 100%;
-}
-
 .adyen-checkout__input {
   background: var(--adyen-checkout-input__background-color, var(--input__background-color));
   border-radius: var(--input__border-radius);
@@ -415,6 +415,27 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
     margin: var(--footer-icon-margin, 0 10px);
   }
 }
+#adyen-google-pay {
+  line-height: var(--button__line-height);
+}
+#adyen-google-pay.text-loading {
+  border-radius: var(--button__text-placeholder-bg-radius);
+  height: var(--adyen-express-button-height, 48px);
+}
+#adyen-google-pay button {
+  border-radius: var(--button__border-radius);
+  height: var(--adyen-express-button-height, 48px);
+  overflow: hidden;
+  width: 100%;
+}
+#adyen-google-pay button .gpay-card-info-iframe {
+  height: 40px;
+}
+
+#adyen-threeds-container {
+  z-index: 300;
+}
+
 .adyen-payment-icons {
   width: var(--footer-icons-width-mobile, auto);
 }
@@ -448,27 +469,6 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
     margin: var(--footer-icon-margin, 0 10px);
   }
 }
-#adyen-google-pay {
-  line-height: var(--button__line-height);
-}
-#adyen-google-pay.text-loading {
-  border-radius: var(--button__text-placeholder-bg-radius);
-  height: var(--adyen-express-button-height, 48px);
-}
-#adyen-google-pay button {
-  border-radius: var(--button__border-radius);
-  height: var(--adyen-express-button-height, 48px);
-  overflow: hidden;
-  width: 100%;
-}
-#adyen-google-pay button .gpay-card-info-iframe {
-  height: 40px;
-}
-
-#adyen-threeds-container {
-  z-index: 300;
-}
-
 .payment-page {
   padding: 0 var(--indent__base--mobile);
 }
