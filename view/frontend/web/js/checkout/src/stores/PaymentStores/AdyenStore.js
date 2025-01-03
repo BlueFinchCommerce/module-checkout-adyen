@@ -147,7 +147,7 @@ export default defineStore('adyenStore', {
           'stores.usePaymentStore',
         ]);
 
-        paymentStore.setHasVaultedMethods();
+        paymentStore.setHasVaultedMethods(true);
       }
 
       return paymentMethodsResponse;
