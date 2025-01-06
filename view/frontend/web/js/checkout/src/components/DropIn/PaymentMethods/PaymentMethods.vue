@@ -181,10 +181,10 @@ export default {
       showPaymentMethods: !this.storedPayments,
       onAdditionalDetails: this.handleAdditionalDetails.bind(this),
       onError: this.handleOnError.bind(this),
-      onSubmit: (state, dropin) => {
+      onSubmit: async (state, dropin) => {
         // Check that the agreements (if any) and recpatcha is valid.
         const agreementsValid = agreementStore.validateAgreements();
-        const recaptchaValid = recaptchaStore.validateToken('placeOrder');
+        const recaptchaValid = await recaptchaStore.validateToken('placeOrder');
         state.isValid = agreementsValid && recaptchaValid;
 
         if (state.isValid) {

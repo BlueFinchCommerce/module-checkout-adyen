@@ -159,9 +159,6 @@ export default {
         onError: async () => {
           clearCartAddresses();
         },
-        onCancel: async () => {
-          clearCartAddresses();
-        },
       };
     },
 
@@ -178,7 +175,7 @@ export default {
 
       // Check that the agreements (if any) and recpatcha is valid.
       const agreementsValid = agreementStore.validateAgreements();
-      const recaptchaValid = recaptchaStore.validateToken('placeOrder');
+      const recaptchaValid = await recaptchaStore.validateToken('placeOrder', 'adyenExpressPayments');
 
       if (!agreementsValid || !recaptchaValid) {
         return false;
