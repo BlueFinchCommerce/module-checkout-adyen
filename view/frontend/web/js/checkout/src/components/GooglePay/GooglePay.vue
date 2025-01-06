@@ -1,4 +1,10 @@
 <template>
+  <component
+    :is="Recaptcha"
+    v-if="getTypeByPlacement('placeOrder') && isExpressExist"
+    id="placeOrder"
+    location="adyenExpressPayments"
+  />
   <div
     id="adyen-google-pay"
     :class="!googlePayLoaded ? 'text-loading' : ''"
@@ -35,6 +41,9 @@ export default {
       key: 'adyenGooglePay',
       orderId: null,
       threeDSVisible: false,
+      Recaptcha: null,
+      getTypeByPlacement: () => {},
+      isExpressExist: false,
     };
   },
   computed: {
@@ -45,10 +54,14 @@ export default {
       cartStore,
       configStore,
       paymentStore,
+      recaptchaStore,
+      Recaptcha,
     ] = await loadFromCheckout([
       'stores.useCartStore',
       'stores.useConfigStore',
       'stores.usePaymentStore',
+      'stores.useRecaptchaStore',
+      'components.Recaptcha',
     ]);
 
     paymentStore.addExpressMethod(this.key);
@@ -57,8 +70,17 @@ export default {
     await this.getInitialConfigValues();
     await cartStore.getCart();
 
+    this.Recaptcha = Recaptcha;
+    this.getTypeByPlacement = recaptchaStore.getTypeByPlacement;
+
     const paymentMethodsResponse = await this.getPaymentMethodsResponse();
     const googlePayMethod = this.getGooglePayMethod(paymentMethodsResponse);
+
+    const expressPaymentsAvailable = this.showCaptcha(paymentMethodsResponse);
+    if (expressPaymentsAvailable) {
+      this.isExpressExist = true;
+    }
+
     if (!googlePayMethod) {
       // Return early if Google Pay isn't enabled in Adyen.
       this.googlePayLoaded = true;
@@ -136,11 +158,15 @@ export default {
       ));
     },
 
+    showCaptcha(paymentMethodsResponse) {
+      return paymentMethodsResponse.paymentMethods.find(({ type }) => (
+        type === 'paywithgoogle' || 'googlepay' || 'applepay'
+      ));
+    },
+
     async handeOnAuthorized() {
       try {
         document.body.classList.remove('gene-checkout-threeds-opened');
-
-        this.setLoadingState(true);
         const response = await getAdyenPaymentStatus(this.orderId);
 
         this.handleAdyenResponse(response);
@@ -222,7 +248,7 @@ export default {
       this.setErrorMessage('');
       // Check that the agreements (if any) and recpatcha is valid.
       const agreementsValid = agreementStore.validateAgreements();
-      const recaptchaValid = recaptchaStore.validateToken('placeOrder');
+      const recaptchaValid = await recaptchaStore.validateToken('placeOrder', 'adyenExpressPayments');
 
       if (!agreementsValid || !recaptchaValid) {
         return false;
