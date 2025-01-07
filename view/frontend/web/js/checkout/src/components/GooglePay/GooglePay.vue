@@ -347,6 +347,16 @@ export default {
             },
           };
           resolve(paymentDataRequestUpdate);
+
+          // edge case then user open googlepay and close it after shipping address is set to cart
+          // but before set shipping methods request is finished
+          // we cant interfere into already processing request so we need to check if googlepay element
+          // is there and if not - cleat shipping address for checkout
+          setTimeout(() => {
+            if (!document.querySelector('gpay-graypane')) {
+              this.clearAddresses();
+            }
+          }, 1000);
         })
           .catch((error) => {
             resolve({
