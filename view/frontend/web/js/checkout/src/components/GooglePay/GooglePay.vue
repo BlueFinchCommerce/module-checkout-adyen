@@ -1,10 +1,14 @@
 <template>
-  <component
-    :is="Recaptcha"
-    v-if="getTypeByPlacement('placeOrder') && isExpressExist"
-    id="placeOrder"
-    location="adyenExpressPayments"
-  />
+  <teleport
+    to=".instant-payment-buttons"
+  >
+    <component
+      :is="Recaptcha"
+      v-if="getTypeByPlacement('placeOrder') && isExpressExist"
+      id="placeOrder"
+      location="adyenExpressPayments"
+    />
+  </teleport>
   <div
     id="adyen-google-pay"
     :class="!googlePayLoaded ? 'text-loading' : ''"
@@ -354,7 +358,8 @@ export default {
           // is there and if not - cleat shipping address for checkout
           setTimeout(() => {
             if (!document.querySelector('gpay-graypane')) {
-              this.clearAddresses();
+              this.setLoadingState(false);
+              clearCartAddresses();
             }
           }, 1000);
         })
