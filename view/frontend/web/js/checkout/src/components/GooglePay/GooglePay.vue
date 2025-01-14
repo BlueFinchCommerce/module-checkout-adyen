@@ -354,6 +354,7 @@ export default {
           // is there and if not - cleat shipping address for checkout
           setTimeout(() => {
             if (!document.querySelector('gpay-graypane')) {
+              this.setLoadingState(false);
               clearCartAddresses();
             }
           }, 1000);
