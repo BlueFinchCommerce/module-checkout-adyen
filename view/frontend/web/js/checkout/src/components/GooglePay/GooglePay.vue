@@ -1,10 +1,14 @@
 <template>
-  <component
-    :is="Recaptcha"
-    v-if="getTypeByPlacement('placeOrder') && isExpressExist"
-    id="placeOrder"
-    location="adyenExpressPayments"
-  />
+  <teleport
+    to=".instant-payment-buttons"
+  >
+    <component
+      :is="Recaptcha"
+      v-if="getTypeByPlacement('placeOrder') && isExpressExist"
+      id="placeOrder"
+      location="adyenExpressPayments"
+    />
+  </teleport>
   <div
     id="adyen-google-pay"
     :class="!googlePayLoaded ? 'text-loading' : ''"
