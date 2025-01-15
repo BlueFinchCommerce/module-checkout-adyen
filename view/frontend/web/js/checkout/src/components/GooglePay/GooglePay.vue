@@ -170,7 +170,7 @@ export default {
 
     async handeOnAuthorized() {
       try {
-        document.body.classList.remove('gene-checkout-threeds-opened');
+        document.body.classList.remove('bluefinch-checkout-threeds-opened');
         const response = await getAdyenPaymentStatus(this.orderId);
 
         this.handleAdyenResponse(response);
@@ -480,14 +480,14 @@ export default {
       } else if (response.action) {
         // If the action is 3DS related then add a class globally so we can display as popup.
         if (response.action.type === 'threeDS2') {
-          document.body.classList.add('gene-checkout-threeds-opened');
+          document.body.classList.add('bluefinch-checkout-threeds-opened');
         }
 
         const threeDSConfiguration = {
           challengeWindowSize: '05',
           onError: async (error) => {
             this.setLoadingState(false);
-            document.body.classList.remove('gene-checkout-threeds-opened');
+            document.body.classList.remove('bluefinch-checkout-threeds-opened');
             clearCartAddresses();
             this.setErrorMessage(error.message);
           },
@@ -500,7 +500,7 @@ export default {
 
     async onAdditionalDetails(state, component) {
       try {
-        document.body.classList.remove('gene-checkout-threeds-opened');
+        document.body.classList.remove('bluefinch-checkout-threeds-opened');
         const request = state.data ? state.data : {};
         request.orderId = this.orderId;
         const response = await getAdyenPaymentDetails(JSON.stringify(request));

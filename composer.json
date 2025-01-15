@@ -1,5 +1,5 @@
 {
-  "name": "gene/module-better-checkout-adyen",
+  "name": "bluefinch/module-checkout-adyen",
   "description": "",
   "type": "magento2-module",
   "autoload": {
@@ -7,12 +7,12 @@
       "registration.php"
     ],
     "psr-4": {
-      "Gene\\BetterCheckoutAdyen\\": ""
+      "Bluefinch\\BetterCheckoutAdyen\\": ""
     }
   },
   "require": {
     "magento/framework": "*",
-    "gene/module-better-checkout": "^1.0"
+    "bluefinchcommerce/module-checkoutt": "^1.0"
   },
   "require-dev": {
     "magento/magento-coding-standard": "*",
@@ -29,7 +29,7 @@
       },
       {
           "type": "composer",
-          "url": "https://repo.packagist.com/gene/"
+          "url": "https://repo.packagist.com/bluefinch/"
       }
   ],
   "authors": [

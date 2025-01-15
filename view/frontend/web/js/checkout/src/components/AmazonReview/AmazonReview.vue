@@ -156,7 +156,7 @@ export default {
     async handleAdditionalDetails(state, component) {
       try {
         this.state = 'loading';
-        document.body.classList.remove('gene-checkout-threeds-opened');
+        document.body.classList.remove('bluefinch-checkout-threeds-opened');
         const request = state.data ? state.data : {};
         request.orderId = this.orderId;
         const response = await getAdyenPaymentDetails(JSON.stringify(request));
@@ -206,7 +206,7 @@ export default {
       } else if (response.action) {
         // If the action is 3DS related then add a class globally so we can display as popup.
         if (response.action.type === 'threeDS2') {
-          document.body.classList.add('gene-checkout-threeds-opened');
+          document.body.classList.add('bluefinch-checkout-threeds-opened');
         }
 
         component.handleAction(response.action);

@@ -2,12 +2,12 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <!-- Add Better Checkout -->
-        <referenceContainer name="gene.better.checkout.container">
-            <block name="gene.better.checkout.adyen" template="Gene_BetterCheckoutAdyen::adyen.phtml"
-                   ifconfig="payment/adyen_abstract/payment_methods_active"
+        <referenceContainer name="bluefinch.checkout.container">
+            <block name="bluefinch.checkout.adyen" template="Bluefinch_CheckoutAdyen::adyen.phtml"
+                   ifconfig="payment/adyen_abstract/Bluefinch_CheckoutAdyen"
                    after="-">
                 <arguments>
-                    <argument name="asset_view_model" xsi:type="object">Gene\BetterCheckout\ViewModel\Assets</argument>
+                    <argument name="asset_view_model" xsi:type="object">Bluefinch\CheckoutAdyen\ViewModel\Assets</argument>
                 </arguments>
             </block>
         </referenceContainer>
