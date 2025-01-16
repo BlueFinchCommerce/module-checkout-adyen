@@ -56,7 +56,7 @@ export default defineStore('adyenStore', {
           adyen_client_key_test
           adyen_version_number
         }
-      }`, {}, {}, 'BetterCheckoutStoreConfigAdyen').then(this.handleInitialConfig).then(this.getVaultConfig);
+      }`, {}, {}, 'BlueFinchCheckoutStoreConfigAdyen').then(this.handleInitialConfig).then(this.getVaultConfig);
 
       await this.getCachedResponse(request, 'getInitialConfig');
     },
@@ -99,7 +99,7 @@ export default defineStore('adyenStore', {
         storeConfig {
           ${config}
         }
-      }`, {}, {}, 'BetterCheckoutStoreConfig').then(({ data: { storeConfig } }) => {
+      }`, {}, {}, 'BlueFinchCheckoutStoreConfig').then(({ data: { storeConfig } }) => {
         if (this.isAdyenVersion('9')) {
           this.setData({
             recurringConfiguration: JSON.parse(storeConfig.recurring_configuration),

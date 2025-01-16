@@ -26,7 +26,7 @@ export default async (orderId) => {
     }
   } `;
 
-  return graphQlRequest(request, {}, {}, 'BetterCheckoutAdyenPaymentStatus')
+  return graphQlRequest(request, {}, {}, 'BlueFinchCheckoutAdyenPaymentStatus')
     .then((response) => ({
       ...response.data.adyenPaymentStatus,
       action: JSON.parse(response.data.adyenPaymentStatus.action),
