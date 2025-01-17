@@ -22,16 +22,16 @@
     "squizlabs/php_codesniffer": "^3.6",
     "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
   },
-  "repositories": [
-      {
-          "type": "composer",
-          "url": "https://repo.magento.com/"
-      },
-      {
-          "type": "composer",
-          "url": "https://repo.packagist.com/gene/"
-      }
-  ],
+  "repositories": {
+    "magento": {
+      "type": "composer",
+      "url": "https://mirror.mage-os.org/"
+    },
+    "checkout": {
+      "type": "git",
+      "url": "https://github.com/genecommerce/module-better-checkout"
+    }
+  },
   "authors": [
     {
       "name": "",
