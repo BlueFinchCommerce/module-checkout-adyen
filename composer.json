@@ -1,5 +1,5 @@
 {
-  "name": "bluefinch/module-checkout-adyen",
+  "name": "bluefinchcommerce/module-checkout-adyen",
   "description": "",
   "type": "magento2-module",
   "autoload": {
@@ -29,7 +29,7 @@
       },
       {
           "type": "composer",
-          "url": "https://repo.packagist.com/bluefinch/"
+          "url": "https://repo.packagist.com/bluefinchcommerce/"
       }
   ],
   "authors": [
