@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bluefinch\CheckoutAdyen\Model\Resolver;
+namespace BlueFinch\CheckoutAdyen\Model\Resolver;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
