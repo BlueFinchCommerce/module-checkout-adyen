@@ -1,14 +1,4 @@
 <template>
-  <teleport
-    to=".instant-payment-buttons"
-  >
-    <component
-      :is="Recaptcha"
-      v-if="getTypeByPlacement('placeOrder') && isExpressExist"
-      id="placeOrder"
-      location="adyenExpressPayments"
-    />
-  </teleport>
   <div
     id="adyen-google-pay"
     :class="!googlePayLoaded ? 'text-loading' : ''"
@@ -45,9 +35,6 @@ export default {
       key: 'adyenGooglePay',
       orderId: null,
       threeDSVisible: false,
-      Recaptcha: null,
-      getTypeByPlacement: () => {},
-      isExpressExist: false,
     };
   },
   computed: {
@@ -58,14 +45,10 @@ export default {
       cartStore,
       configStore,
       paymentStore,
-      recaptchaStore,
-      Recaptcha,
     ] = await loadFromCheckout([
       'stores.useCartStore',
       'stores.useConfigStore',
       'stores.usePaymentStore',
-      'stores.useRecaptchaStore',
-      'components.Recaptcha',
     ]);
 
     paymentStore.addExpressMethod(this.key);
@@ -74,16 +57,8 @@ export default {
     await this.getInitialConfigValues();
     await cartStore.getCart();
 
-    this.Recaptcha = Recaptcha;
-    this.getTypeByPlacement = recaptchaStore.getTypeByPlacement;
-
     const paymentMethodsResponse = await this.getPaymentMethodsResponse();
     const googlePayMethod = this.getGooglePayMethod(paymentMethodsResponse);
-
-    const expressPaymentsAvailable = this.showCaptcha(paymentMethodsResponse);
-    if (expressPaymentsAvailable) {
-      this.isExpressExist = true;
-    }
 
     if (!googlePayMethod) {
       // Return early if Google Pay isn't enabled in Adyen.
@@ -159,12 +134,6 @@ export default {
     getGooglePayMethod(paymentMethodsResponse) {
       return paymentMethodsResponse.paymentMethods.find(({ type }) => (
         type === 'paywithgoogle' || 'googlepay'
-      ));
-    },
-
-    showCaptcha(paymentMethodsResponse) {
-      return paymentMethodsResponse.paymentMethods.find(({ type }) => (
-        type === 'paywithgoogle' || 'googlepay' || 'applepay'
       ));
     },
 

@@ -1,4 +1,10 @@
 <template>
+  <component
+    :is="Recaptcha"
+    v-if="getTypeByPlacement('placeOrder') && isExpressExist"
+    id="placeOrder"
+    location="adyenExpressPayments"
+  />
   <div
     v-if="applePayAvailable"
     id="adyen-apple-pay"
@@ -30,6 +36,9 @@ export default {
       applePayNoShippingMethods: '',
       applePayLoaded: true,
       key: 'adyenApplePay',
+      Recaptcha: null,
+      getTypeByPlacement: () => {},
+      isExpressExist: false,
     };
   },
 
@@ -38,33 +47,48 @@ export default {
   },
 
   async created() {
-    // If the browser doesn't support Apple Pay then return early.
-    if (!window.ApplePaySession || !window.ApplePaySession.canMakePayments) {
-      return;
-    }
-
     const [
       cartStore,
       configStore,
       paymentStore,
+      recaptchaStore,
+      Recaptcha,
     ] = await loadFromCheckout([
       'stores.useCartStore',
       'stores.useConfigStore',
       'stores.usePaymentStore',
+      'stores.useRecaptchaStore',
+      'components.Recaptcha',
     ]);
+
+    // Set reCAPTCHA component and method
+    this.Recaptcha = Recaptcha;
+    this.getTypeByPlacement = recaptchaStore.getTypeByPlacement;
+
+    // Get available payment methods
+    const paymentMethodsResponse = await this.getPaymentMethodsResponse();
+
+    // Check if express payment options exist to show reCAPTCHA
+    const expressPaymentsAvailable = this.showCaptcha(paymentMethodsResponse);
+    if (expressPaymentsAvailable) {
+      this.isExpressExist = true;
+    }
+
+    // Check Apple Pay availability
+    if (!window.ApplePaySession || !window.ApplePaySession.canMakePayments) {
+      return; // Exit if Apple Pay isn't supported, but reCAPTCHA will still render
+    }
+
+    // Always fetch initial config and cart data
+    await configStore.getInitialConfig();
+    await this.getInitialConfigValues();
+    await cartStore.getCart();
 
     paymentStore.addExpressMethod(this.key);
     this.applePayLoaded = false;
     this.applePayAvailable = true;
 
-    await configStore.getInitialConfig();
-    await this.getInitialConfigValues();
-    await cartStore.getCart();
-
-    const paymentMethodsResponse = await this.getPaymentMethodsResponse();
-
     const applePayMethod = this.getApplePayMethod(paymentMethodsResponse);
-
     if (!applePayMethod) {
       // Return early if Apple Pay isn't enabled in Adyen.
       this.applePayLoaded = true;
@@ -112,6 +136,12 @@ export default {
     getApplePayMethod(paymentMethodsResponse) {
       return paymentMethodsResponse.paymentMethods.find(({ type }) => (
         type === 'applepay'
+      ));
+    },
+
+    showCaptcha(paymentMethodsResponse) {
+      return paymentMethodsResponse.paymentMethods.find(({ type }) => (
+        type === 'paywithgoogle' || 'googlepay' || 'applepay'
       ));
     },
 
