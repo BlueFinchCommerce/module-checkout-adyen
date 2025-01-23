@@ -111,7 +111,7 @@ jobs:
           name: DI Compile
           command: php -d memory_limit=-1 bin/magento setup:di:compile
       - run:
-          name: Install composer modules within Better Checkout
+          name: Install composer modules within BlueFinch Checkout
           command: |
             composer install --working-dir=vendor/bluefinchcommerce/module-checkout-adyen  --dev
       - run:
@@ -146,7 +146,7 @@ jobs:
           command: npm --prefix vendor/bluefinchcommerce/module-checkout-adyen run lint
       - run:
           name: ESLint run against checkout app
-          command: npm --prefix vendor/bluefinchcommerce/module-better-checkout-adyen/view/frontend/web/js/checkout run lint
+          command: npm --prefix vendor/bluefinchcommerce/module-checkout-adyen/view/frontend/web/js/checkout run lint
 
 workflows:
   build-test:

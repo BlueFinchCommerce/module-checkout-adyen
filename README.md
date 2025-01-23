@@ -2,21 +2,21 @@
 
 ![Checkout Powered by BlueFinch](./assets/logo.svg)
 
-# Bluefinch Checkout Adyen Module
+# BlueFinch Checkout Adyen Module
 
 ## Requirements
 
 - Magento 2.4.6 or higher
 - Node 16 or higher (for development purposes only)
-- Latest version of Bluefinch Checkout
+- Latest version of BlueFinch Checkout
 
 ## Installation
 
-Ensure you have installed the latest version of Bluefinch Checkout, which can be found here, [Bluefinch Checkout](https://github.com/bluefinchcommerce/module-checkout).
+Ensure you have installed the latest version of BlueFinch Checkout, which can be found here, [BlueFinch Checkout](https://github.com/bluefinchcommerce/module-checkout).
 
 To install the Checkout Adyen module, run the following command in your Magento 2 root directory:
 
-``` composer require bluefinch/module-checkout-adyen:^1.0 ```
+``` composer require bluefinch/module-checkout-adyen ```
 
 Checkout Adyen follows the standard installation process for Adobe Commerce.
 

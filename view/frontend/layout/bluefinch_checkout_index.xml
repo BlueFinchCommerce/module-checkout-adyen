@@ -2,11 +2,11 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="bluefinch.checkout.container">
-            <block name="bluefinch.checkout.adyen" template="Bluefinch_CheckoutAdyen::adyen.phtml"
-                   ifconfig="payment/adyen_abstract/Bluefinch_CheckoutAdyen"
+            <block name="bluefinch.checkout.adyen" template="BlueFinch_CheckoutAdyen::adyen.phtml"
+                   ifconfig="payment/adyen_abstract/BlueFinch_CheckoutAdyen"
                    after="-">
                 <arguments>
-                    <argument name="asset_view_model" xsi:type="object">Bluefinch\CheckoutAdyen\ViewModel\Assets</argument>
+                    <argument name="asset_view_model" xsi:type="object">BlueFinch\CheckoutAdyen\ViewModel\Assets</argument>
                 </arguments>
             </block>
         </referenceContainer>
