@@ -1,5 +1,5 @@
 {
-  "name": "gene-template-module",
+  "name": "bluefinch-checkout-adyen",
   "version": "1.0.0",
   "description": "## What is this?",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/genecommerce/template-module.git"
+    "url": "git+https://github.com/bluefinchcommerce/template-module.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/genecommerce/template-module/issues"
+    "url": "https://github.com/bluefinchcommerce/template-module/issues"
   },
-  "homepage": "https://github.com/genecommerce/template-module#readme",
+  "homepage": "https://github.com/bluefinchcommerce/template-module#readme",
   "devDependencies": {
     "eslint": "^8"
   }

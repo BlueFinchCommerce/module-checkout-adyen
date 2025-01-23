@@ -1,5 +1,5 @@
 {
-  "name": "gene-better-checkout-adyen",
+  "name": "bluefinch-checkout-adyen",
   "description": "",
   "main": "index.js",
   "type": "module",
