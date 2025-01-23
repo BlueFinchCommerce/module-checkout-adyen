@@ -12,7 +12,7 @@
   },
   "require": {
     "magento/framework": "*",
-    "bluefinchcommerce/module-checkoutt": "^1.0"
+    "bluefinchcommerce/module-checkout": "^1.0"
   },
   "require-dev": {
     "magento/magento-coding-standard": "*",
