@@ -35,6 +35,7 @@ export default {
       key: 'adyenGooglePay',
       orderId: null,
       threeDSVisible: false,
+      hasCancelled: false,
     };
   },
   computed: {
@@ -175,7 +176,7 @@ export default {
         environment: getAdyenProductionMode() ? 'LIVE' : 'TEST',
         paymentDataCallbacks: {
           onPaymentAuthorized: this.onPaymentAuthorized,
-          ...(cartStore.cart.is_virtual ? {} : { onPaymentDataChanged: this.onPaymentDataChanged }),
+          ...(cartStore.cart.is_virtual ? {} : { onPaymentDataChanged: this.onPaymentDataChanged.bind(this) }),
         },
         emailRequired: true,
         shippingAddressRequired: !cartStore.cart.is_virtual,
@@ -197,10 +198,12 @@ export default {
         onClick: (resolve, reject) => this.onClick(resolve, reject, googlePayConfig.type),
         onSubmit: () => {},
         onError: async () => {
+          this.hasCancelled = true;
           clearCartAddresses();
           this.setLoadingState(false);
         },
         onCancel: async () => {
+          this.hasCancelled = true;
           clearCartAddresses();
           this.setLoadingState(false);
         },
@@ -236,6 +239,9 @@ export default {
 
     onPaymentDataChanged(data) {
       return new Promise(async (resolve) => {
+        this.setLoadingState(true);
+        this.hasCancelled = false;
+
         const [
           formatPrice,
           getShippingMethods,
@@ -262,6 +268,12 @@ export default {
         };
 
         getShippingMethods(address).then(async (response) => {
+          if (this.hasCancelled) {
+            clearCartAddresses();
+            resolve();
+            return;
+          }
+
           const methods = response.shipping_addresses[0].available_shipping_methods;
 
           const shippingMethods = methods.map((shippingMethod) => {
@@ -296,7 +308,12 @@ export default {
             : methods.find(({ method_code: id }) => id === data.shippingOptionData.id) || methods[0];
 
           await shippingMethodsStore.submitShippingInfo(selectedShipping.carrier_code, selectedShipping.method_code);
-          this.setLoadingState(true);
+
+          if (this.hasCancelled) {
+            clearCartAddresses();
+            resolve();
+            return;
+          }
 
           const paymentDataRequestUpdate = {
             newShippingOptionParameters: {
@@ -320,17 +337,6 @@ export default {
             },
           };
           resolve(paymentDataRequestUpdate);
-
-          // edge case then user open googlepay and close it after shipping address is set to cart
-          // but before set shipping methods request is finished
-          // we cant interfere into already processing request so we need to check if googlepay element
-          // is there and if not - cleat shipping address for checkout
-          setTimeout(() => {
-            if (!document.querySelector('gpay-graypane')) {
-              this.setLoadingState(false);
-              clearCartAddresses();
-            }
-          }, 1000);
         })
           .catch((error) => {
             resolve({
