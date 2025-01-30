@@ -3,7 +3,7 @@
     <body>
         <referenceContainer name="bluefinch.checkout.container">
             <block name="bluefinch.checkout.adyen" template="BlueFinch_CheckoutAdyen::adyen.phtml"
-                   ifconfig="payment/adyen_abstract/BlueFinch_CheckoutAdyen"
+                   ifconfig="payment/adyen_abstract/payment_methods_active"
                    after="-">
                 <arguments>
                     <argument name="asset_view_model" xsi:type="object">BlueFinch\CheckoutAdyen\ViewModel\Assets</argument>
