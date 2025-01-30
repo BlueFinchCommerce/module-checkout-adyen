@@ -6,7 +6,7 @@
                    ifconfig="payment/adyen_abstract/payment_methods_active"
                    after="-">
                 <arguments>
-                    <argument name="asset_view_model" xsi:type="object">BlueFinch\CheckoutAdyen\ViewModel\Assets</argument>
+                    <argument name="asset_view_model" xsi:type="object">BlueFinch\Checkout\ViewModel\Assets</argument>
                 </arguments>
             </block>
         </referenceContainer>
