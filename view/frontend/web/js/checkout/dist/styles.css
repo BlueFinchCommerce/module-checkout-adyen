@@ -1,17 +1,3 @@
-#adyen-apple-pay {
-  line-height: var(--button__line-height);
-}
-#adyen-apple-pay.text-loading {
-  border-radius: var(--button__text-placeholder-bg-radius);
-  height: var(--braintree-express-button-height, 48px);
-}
-#adyen-apple-pay > button {
-  border-radius: var(--button__border-radius);
-  height: var(--adyen-express-button-height, 48px);
-  overflow: hidden;
-  width: 100%;
-}
-
 .payment-page {
   padding: 0 var(--indent__base--mobile);
 }
@@ -28,6 +14,20 @@
     padding: var(--form-details-padding-desktop, 40px 40px 70px);
   }
 }
+#adyen-apple-pay {
+  line-height: var(--button__line-height);
+}
+#adyen-apple-pay.text-loading {
+  border-radius: var(--button__text-placeholder-bg-radius);
+  height: var(--braintree-express-button-height, 48px);
+}
+#adyen-apple-pay > button {
+  border-radius: var(--button__border-radius);
+  height: var(--adyen-express-button-height, 48px);
+  overflow: hidden;
+  width: 100%;
+}
+
 .adyen-checkout__input {
   background: var(--adyen-checkout-input__background-color, var(--input__background-color));
   border-radius: var(--input__border-radius);
@@ -431,27 +431,6 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
     margin: var(--footer-icon-margin, 0 10px);
   }
 }
-#adyen-google-pay {
-  line-height: var(--button__line-height);
-}
-#adyen-google-pay.text-loading {
-  border-radius: var(--button__text-placeholder-bg-radius);
-  height: var(--adyen-express-button-height, 48px);
-}
-#adyen-google-pay button {
-  border-radius: var(--button__border-radius);
-  height: var(--adyen-express-button-height, 48px);
-  overflow: hidden;
-  width: 100%;
-}
-#adyen-google-pay button .gpay-card-info-iframe {
-  height: 40px;
-}
-
-#adyen-threeds-container {
-  z-index: 300;
-}
-
 .adyen-payment-icons {
   width: var(--footer-icons-width-mobile, auto);
 }
@@ -485,38 +464,25 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
     margin: var(--footer-icon-margin, 0 10px);
   }
 }
-.adyen-checkout__payment-method-tick {
-  align-self: self-start;
-  display: flex;
-  fill: var(--adyen-saved-card-tick-color, var(--color__semantic-success));
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: flex-end;
+#adyen-google-pay {
+  line-height: var(--button__line-height);
 }
-.adyen-checkout__payment-method-select {
-  align-self: flex-start;
-  justify-self: flex-end;
-  text-decoration: underline;
+#adyen-google-pay.text-loading {
+  border-radius: var(--button__text-placeholder-bg-radius);
+  height: var(--adyen-express-button-height, 48px);
 }
-.adyen-checkout__payment-method__card-number, .adyen-checkout__payment-method__name {
-  font-size: var(--font__xs);
-  grid-column: 1;
-  text-align: left;
+#adyen-google-pay button {
+  border-radius: var(--button__border-radius);
+  height: var(--adyen-express-button-height, 48px);
+  overflow: hidden;
+  width: 100%;
 }
-.adyen-checkout__payment-method__expiry-label, .adyen-checkout__payment-method__expiry {
-  font-size: var(--font__xs);
-  grid-column: 2;
-  text-align: right;
-}
-.adyen-checkout__payment-method__name, .adyen-checkout__payment-method__expiry {
-  font-weight: var(--font-weight__semibold);
-}
-.adyen-checkout__payment-method__expiry-label {
-  grid-row: 2;
+#adyen-google-pay button .gpay-card-info-iframe {
+  height: 40px;
 }
 
-.adyen-checkout__payment-stored-methods .adyen-checkout__payment-method__image__wrapper {
-  margin-right: var(--indent__s);
+#adyen-threeds-container {
+  z-index: 300;
 }
 
 #adyen-dropin-container-stored {
@@ -719,6 +685,40 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
     font-size: var(--payment-page-title-desktop-font, var(--font__heading--desktop));
   }
 }
+.adyen-checkout__payment-method-tick {
+  align-self: self-start;
+  display: flex;
+  fill: var(--adyen-saved-card-tick-color, var(--color__semantic-success));
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: flex-end;
+}
+.adyen-checkout__payment-method-select {
+  align-self: flex-start;
+  justify-self: flex-end;
+  text-decoration: underline;
+}
+.adyen-checkout__payment-method__card-number, .adyen-checkout__payment-method__name {
+  font-size: var(--font__xs);
+  grid-column: 1;
+  text-align: left;
+}
+.adyen-checkout__payment-method__expiry-label, .adyen-checkout__payment-method__expiry {
+  font-size: var(--font__xs);
+  grid-column: 2;
+  text-align: right;
+}
+.adyen-checkout__payment-method__name, .adyen-checkout__payment-method__expiry {
+  font-weight: var(--font-weight__semibold);
+}
+.adyen-checkout__payment-method__expiry-label {
+  grid-row: 2;
+}
+
+.adyen-checkout__payment-stored-methods .adyen-checkout__payment-method__image__wrapper {
+  margin-right: var(--indent__s);
+}
+
 .adyen-checkout__spinner__wrapper {
   align-items: center;
   display: flex;
