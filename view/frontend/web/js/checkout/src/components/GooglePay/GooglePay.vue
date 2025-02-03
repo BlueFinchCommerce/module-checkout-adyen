@@ -35,6 +35,7 @@ export default {
       key: 'adyenGooglePay',
       orderId: null,
       threeDSVisible: false,
+      hasCancelled: false,
     };
   },
   computed: {
@@ -59,6 +60,7 @@ export default {
 
     const paymentMethodsResponse = await this.getPaymentMethodsResponse();
     const googlePayMethod = this.getGooglePayMethod(paymentMethodsResponse);
+
     if (!googlePayMethod) {
       // Return early if Google Pay isn't enabled in Adyen.
       this.googlePayLoaded = true;
@@ -138,15 +140,14 @@ export default {
 
     async handeOnAuthorized() {
       try {
-        document.body.classList.remove('gene-checkout-threeds-opened');
-
-        this.setLoadingState(true);
+        document.body.classList.remove('bluefinch-checkout-threeds-opened');
         const response = await getAdyenPaymentStatus(this.orderId);
 
         this.handleAdyenResponse(response);
       } catch (error) {
         // If the getAdyenPaymentDetails call errors we need to catch it.
         this.setLoadingState(false);
+        clearCartAddresses();
         const message = error.response?.data?.message;
         this.setErrorMessage(message);
       }
@@ -175,7 +176,7 @@ export default {
         environment: getAdyenProductionMode() ? 'LIVE' : 'TEST',
         paymentDataCallbacks: {
           onPaymentAuthorized: this.onPaymentAuthorized,
-          ...(cartStore.cart.is_virtual ? {} : { onPaymentDataChanged: this.onPaymentDataChanged }),
+          ...(cartStore.cart.is_virtual ? {} : { onPaymentDataChanged: this.onPaymentDataChanged.bind(this) }),
         },
         emailRequired: true,
         shippingAddressRequired: !cartStore.cart.is_virtual,
@@ -197,6 +198,12 @@ export default {
         onClick: (resolve, reject) => this.onClick(resolve, reject, googlePayConfig.type),
         onSubmit: () => {},
         onError: async () => {
+          this.hasCancelled = true;
+          clearCartAddresses();
+          this.setLoadingState(false);
+        },
+        onCancel: async () => {
+          this.hasCancelled = true;
           clearCartAddresses();
           this.setLoadingState(false);
         },
@@ -217,7 +224,7 @@ export default {
       this.setErrorMessage('');
       // Check that the agreements (if any) and recpatcha is valid.
       const agreementsValid = agreementStore.validateAgreements();
-      const recaptchaValid = recaptchaStore.validateToken('placeOrder');
+      const recaptchaValid = await recaptchaStore.validateToken('placeOrder', 'adyenExpressPayments');
 
       if (!agreementsValid || !recaptchaValid) {
         return false;
@@ -232,6 +239,9 @@ export default {
 
     onPaymentDataChanged(data) {
       return new Promise(async (resolve) => {
+        this.setLoadingState(true);
+        this.hasCancelled = false;
+
         const [
           formatPrice,
           getShippingMethods,
@@ -258,6 +268,12 @@ export default {
         };
 
         getShippingMethods(address).then(async (response) => {
+          if (this.hasCancelled) {
+            clearCartAddresses();
+            resolve();
+            return;
+          }
+
           const methods = response.shipping_addresses[0].available_shipping_methods;
 
           const shippingMethods = methods.map((shippingMethod) => {
@@ -292,7 +308,12 @@ export default {
             : methods.find(({ method_code: id }) => id === data.shippingOptionData.id) || methods[0];
 
           await shippingMethodsStore.submitShippingInfo(selectedShipping.carrier_code, selectedShipping.method_code);
-          this.setLoadingState(true);
+
+          if (this.hasCancelled) {
+            clearCartAddresses();
+            resolve();
+            return;
+          }
 
           const paymentDataRequestUpdate = {
             newShippingOptionParameters: {
@@ -428,16 +449,23 @@ export default {
           await refreshCustomerData(getCartSectionNames());
           window.location.href = getSuccessPageUrl();
         } else {
+          clearCartAddresses();
           this.setLoadingState(false);
         }
       } else if (response.action) {
         // If the action is 3DS related then add a class globally so we can display as popup.
         if (response.action.type === 'threeDS2') {
-          document.body.classList.add('gene-checkout-threeds-opened');
+          document.body.classList.add('bluefinch-checkout-threeds-opened');
         }
 
         const threeDSConfiguration = {
           challengeWindowSize: '05',
+          onError: async (error) => {
+            this.setLoadingState(false);
+            document.body.classList.remove('bluefinch-checkout-threeds-opened');
+            clearCartAddresses();
+            this.setErrorMessage(error.message);
+          },
         };
 
         this.threeDSVisible = true;
@@ -447,7 +475,7 @@ export default {
 
     async onAdditionalDetails(state, component) {
       try {
-        document.body.classList.remove('gene-checkout-threeds-opened');
+        document.body.classList.remove('bluefinch-checkout-threeds-opened');
         const request = state.data ? state.data : {};
         request.orderId = this.orderId;
         const response = await getAdyenPaymentDetails(JSON.stringify(request));

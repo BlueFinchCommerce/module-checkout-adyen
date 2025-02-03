@@ -26,7 +26,7 @@ export default async (payload) => {
     payload,
   };
 
-  return graphQlRequest(request, variables)
+  return graphQlRequest(request, variables, {}, 'BlueFinchCheckoutAdyenPaymentDetails')
     .then((response) => {
       if (response.errors) {
         throw new Error(response.errors[0].message);

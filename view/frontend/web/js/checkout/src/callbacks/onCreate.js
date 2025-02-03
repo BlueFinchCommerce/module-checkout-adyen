@@ -3,7 +3,7 @@ import useAdyenStore from '../stores/PaymentStores/AdyenStore';
 import loadFromCheckout from '../helpers/loadFromCheckout';
 
 export default async () => {
-  const { router } = window.geneCheckout;
+  const { router } = window.bluefinchCheckout;
 
   router.addRoute({ path: '/adyen-amazon-review', component: AmazonReview });
 

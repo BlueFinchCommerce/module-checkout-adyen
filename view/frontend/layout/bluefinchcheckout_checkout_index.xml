@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="bluefinch.checkout.container">
+            <block name="bluefinch.checkout.adyen" template="BlueFinch_CheckoutAdyen::adyen.phtml"
+                   ifconfig="payment/adyen_abstract/payment_methods_active"
+                   after="-">
+                <arguments>
+                    <argument name="asset_view_model" xsi:type="object">BlueFinch\Checkout\ViewModel\Assets</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

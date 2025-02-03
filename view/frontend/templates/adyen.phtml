@@ -2,40 +2,42 @@
 /**
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
- * @var \Gene\BetterCheckout\ViewModel\Assets $assetViewModel
+ * @var \BlueFinch\CheckoutAdyen\ViewModel\Assets $assetViewModel
  */
 
-$applePay = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/ApplePay/ApplePay.min.js');
-$googlePay = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/GooglePay/GooglePay.min.js');
-$dropIn = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/DropIn/DropIn.min.js');
-$vaulted = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/DropIn/VaultedMethods.min.js');
-$icons = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/FooterIcons/FooterIcons.min.js');
-$paymentIcons = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/components/PaymentIcons/PaymentIcons.min.js');
-$onCreate = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/callbacks/onCreate.min.js');
-$onLogin = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/callbacks/onLogin.min.js');
-$styles = $block->getViewFileUrl('Gene_BetterCheckoutAdyen::js/checkout/dist/styles.css');
+$assetViewModel = $block->getAssetViewModel();
+
+$applePay = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/checkout/dist/components/ApplePay/ApplePay.min.js');
+$googlePay = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/checkout/dist/components/GooglePay/GooglePay.min.js');
+$dropIn = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/checkout/dist/components/DropIn/DropIn.min.js');
+$vaulted = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/checkout/dist/components/DropIn/VaultedMethods.min.js');
+$icons = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/checkout/dist/components/FooterIcons/FooterIcons.min.js');
+$paymentIcons = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/checkout/dist/components/PaymentIcons/PaymentIcons.min.js');
+$onCreate = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/checkout/dist/callbacks/onCreate.min.js');
+$onLogin = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/checkout/dist/callbacks/onLogin.min.js');
+$styles = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/checkout/dist/styles.css');
 ?>
 
 <script>
-  window.geneCheckout = window.geneCheckout || {};
+  window.bluefinchCheckout = window.bluefinchCheckout || {};
 
-  window.geneCheckout.expressPaymentMethods = window.geneCheckout.expressPaymentMethods || {};
-  window.geneCheckout.additionalVaultedMethods = window.geneCheckout.additionalVaultedMethods || {};
-  window.geneCheckout.paymentMethods = window.geneCheckout.paymentMethods || {};
-  window.geneCheckout.footerPaymentIcons = window.geneCheckout.footerPaymentIcons || {};
-  window.geneCheckout.paymentIcons = window.geneCheckout.paymentIcons || {};
-  window.geneCheckout.callbacks = window.geneCheckout.callbacks || {};
-  window.geneCheckout.callbacks.onCreate = window.geneCheckout.callbacks.onCreate || {};
-  window.geneCheckout.callbacks.onLogin = window.geneCheckout.callbacks.onLogin || {};
+  window.bluefinchCheckout.expressPaymentMethods = window.bluefinchCheckout.expressPaymentMethods || {};
+  window.bluefinchCheckout.additionalVaultedMethods = window.bluefinchCheckout.additionalVaultedMethods || {};
+  window.bluefinchCheckout.paymentMethods = window.bluefinchCheckout.paymentMethods || {};
+  window.bluefinchCheckout.footerPaymentIcons = window.bluefinchCheckout.footerPaymentIcons || {};
+  window.bluefinchCheckout.paymentIcons = window.bluefinchCheckout.paymentIcons || {};
+  window.bluefinchCheckout.callbacks = window.bluefinchCheckout.callbacks || {};
+  window.bluefinchCheckout.callbacks.onCreate = window.bluefinchCheckout.callbacks.onCreate || {};
+  window.bluefinchCheckout.callbacks.onLogin = window.bluefinchCheckout.callbacks.onLogin || {};
 
-  window.geneCheckout.expressPaymentMethods.AdyenApplePay = "<?= $escaper->escapeJs($applePay) ?>";
-  window.geneCheckout.expressPaymentMethods.AdyenGooglePay = "<?= $escaper->escapeJs($googlePay) ?>";
-  window.geneCheckout.additionalVaultedMethods.AdyenVaultedMethods = "<?= $escaper->escapeJs($vaulted) ?>";
-  window.geneCheckout.paymentMethods.Adyen = "<?= $escaper->escapeJs($dropIn) ?>";
-  window.geneCheckout.footerPaymentIcons.AdyenFooterIcons = "<?= $escaper->escapeJs($icons) ?>";
-  window.geneCheckout.paymentIcons.AdyenIcons = "<?= $escaper->escapeJs($paymentIcons) ?>";
-  window.geneCheckout.callbacks.onCreate.adyenOnCreate = "<?= $escaper->escapeJs($onCreate) ?>";
-  window.geneCheckout.callbacks.onLogin.adyenOnLogin = "<?= $escaper->escapeJs($onLogin) ?>";
+  window.bluefinchCheckout.expressPaymentMethods.AdyenApplePay = "<?= $escaper->escapeJs($applePay) ?>";
+  window.bluefinchCheckout.expressPaymentMethods.AdyenGooglePay = "<?= $escaper->escapeJs($googlePay) ?>";
+  window.bluefinchCheckout.additionalVaultedMethods.AdyenVaultedMethods = "<?= $escaper->escapeJs($vaulted) ?>";
+  window.bluefinchCheckout.paymentMethods.Adyen = "<?= $escaper->escapeJs($dropIn) ?>";
+  window.bluefinchCheckout.footerPaymentIcons.AdyenFooterIcons = "<?= $escaper->escapeJs($icons) ?>";
+  window.bluefinchCheckout.paymentIcons.AdyenIcons = "<?= $escaper->escapeJs($paymentIcons) ?>";
+  window.bluefinchCheckout.callbacks.onCreate.adyenOnCreate = "<?= $escaper->escapeJs($onCreate) ?>";
+  window.bluefinchCheckout.callbacks.onLogin.adyenOnLogin = "<?= $escaper->escapeJs($onLogin) ?>";
 </script>
 
 <link rel="stylesheet" href="<?= $escaper->escapeHtmlAttr($styles) ?>" />

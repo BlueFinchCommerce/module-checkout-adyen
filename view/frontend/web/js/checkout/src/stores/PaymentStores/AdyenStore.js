@@ -56,17 +56,27 @@ export default defineStore('adyenStore', {
           adyen_client_key_test
           adyen_version_number
         }
-      }`).then(this.handleInitialConfig).then(this.getVaultConfig);
+      }`, {}, {}, 'BlueFinchCheckoutStoreConfigAdyen').then(this.handleInitialConfig).then(this.getVaultConfig);
 
       await this.getCachedResponse(request, 'getInitialConfig');
     },
 
-    handleInitialConfig(config) {
+    async handleInitialConfig(config) {
+      const [
+        paymentStore,
+      ] = await loadFromCheckout([
+        'stores.usePaymentStore',
+      ]);
+      const { availableMethods } = paymentStore;
+      const vaultActive = this.isAdyenVersion('9')
+        ? availableMethods.some(({ code }) => code.includes('adyen_cc_vault'))
+        : config.data.storeConfig.adyen_vault_enabled;
+
       if (config?.data?.storeConfig) {
         this.setData({
           // Adyen's modes are '0' = live, '1' = test.
           adyenEnvironmentMode: config.data.storeConfig.adyen_environment_mode === '0' ? 'live' : 'test',
-          adyenVaultEnabled: config.data.storeConfig.adyen_vault_enabled,
+          adyenVaultEnabled: vaultActive,
           keyLive: config.data.storeConfig.adyen_client_key_live,
           keyTest: config.data.storeConfig.adyen_client_key_test,
           version: config.data.storeConfig.adyen_version_number,
@@ -89,7 +99,7 @@ export default defineStore('adyenStore', {
         storeConfig {
           ${config}
         }
-      }`).then(({ data: { storeConfig } }) => {
+      }`, {}, {}, 'BlueFinchCheckoutStoreConfig').then(({ data: { storeConfig } }) => {
         if (this.isAdyenVersion('9')) {
           this.setData({
             recurringConfiguration: JSON.parse(storeConfig.recurring_configuration),
@@ -103,11 +113,10 @@ export default defineStore('adyenStore', {
     },
 
     async getPaymentMethodsResponse() {
-      const request = async () => getAdyenPaymentMethods();
       const {
         paymentMethodsExtraDetails,
         paymentMethodsResponse,
-      } = await this.getCachedResponse(request, 'getAdyenPaymentMethods');
+      } = await getAdyenPaymentMethods();
 
       // Store the payment methods and icons.
       !this.paymentTypes.length && paymentMethodsResponse.paymentMethods.forEach((method) => {
@@ -138,7 +147,7 @@ export default defineStore('adyenStore', {
           'stores.usePaymentStore',
         ]);
 
-        paymentStore.setHasVaultedMethods();
+        paymentStore.setHasVaultedMethods(true);
       }
 
       return paymentMethodsResponse;

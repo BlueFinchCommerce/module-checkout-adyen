@@ -4,7 +4,7 @@ type StoreConfig {
     adyen_client_key_live: String @doc(description: "Adyen client key live")
     adyen_environment_mode: String @doc(description: "Adyen environment mode")
     adyen_vault_enabled: Boolean @doc(description: "Adyen vault enabled")
-    adyen_version_number: String @resolver(class: "\\Gene\\BetterCheckoutAdyen\\Model\\Resolver\\AdyenVersionNumber") @doc(description: "Adyen module version number.")
+    adyen_version_number: String @resolver(class: "\\BlueFinch\\CheckoutAdyen\\Model\\Resolver\\AdyenVersionNumber") @doc(description: "Adyen module version number.")
     recurring_configuration: String @doc(description: "Adyen recurring configuration.")
 }
 
