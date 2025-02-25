@@ -1,183 +1,3 @@
-.payment-page {
-  padding: 0 var(--indent__base--mobile);
-}
-.adyen-checkout__input:focus-visible, .adyen-checkout__input:focus, .adyen-checkout__input:active {
-  border: var(--input-border, var(--input__border-weight-focus) solid var(--input__border-color-focus));
-  box-shadow: none;
-}
-.adyen-checkout__input:focus-visible:hover, .adyen-checkout__input:focus:hover, .adyen-checkout__input:active:hover {
-  border: var(--input-border-focus, var(--input__border-weight-hover) solid var(--input__border-color-hover));
-  box-shadow: none;
-}
-.adyen-checkout__input:hover {
-  border: var(--input-border-focus, var(--input__border-weight-hover) solid var(--input__border-color-hover));
-  box-shadow: none;
-}
-.adyen-checkout__input-wrapper {
-  width: 100%;
-}
-
-.adyen-checkout__label__text {
-  padding: 0 var(--indent__s);
-  position: var(--adyen-label-position, absolute);
-  top: -5px;
-  background: var(--adyen-checkout-field-label__background-color, var(--input__background-color));
-  line-height: 1em;
-  z-index: 1;
-  left: var(--adyen-label-left-value, 10px);
-  color: var(--adyen-font-color, var(--input__label-font-color));
-  font-size: var(--adyen-font-size, var(--font__xs));
-  font-weight: var(--font-weight__medium);
-  margin-bottom: var(--adyen-label-margin-bottom, 0);
-  transition: none;
-  border-radius: var(--base__border-radius);
-}
-.adyen-checkout__label--focused .adyen-checkout__label__text {
-  color: var(--input__label-font-color);
-}
-
-button.adyen-checkout__button {
-  background: var(--button-adyen-pay__background-color);
-  border-radius: var(--button-adyen-pay__border-radius);
-  box-shadow: var(--button-primary__border-box-shadow);
-  font-size: var(--button__font-medium);
-  line-height: var(--button__line-height);
-  min-height: var(--button__height);
-  text-transform: var(--adyen-checkout-button-text-transform, var(--button__text-transform));
-}
-button.adyen-checkout__button:hover {
-  background: var(--button-adyen-pay__background-color-hover);
-  border-color: var(--button-adyen-pay__border-color-hover);
-  box-shadow: none;
-}
-button.adyen-checkout__button__text {
-  font-family: var(--button__font-family);
-  font-size: var(--adyen-text-button-font-size, var(--button__font-medium));
-  font-weight: var(--adyen-text-button-font-weight, var(--button__font-weight));
-}
-button.adyen-checkout__button.adyen-checkout__button--loading {
-  background: var(--button-adyen-pay__background-color);
-}
-
-.adyen-checkout__payment-method {
-  overflow: hidden;
-}
-.adyen-checkout__payment-method__header {
-  cursor: pointer;
-  padding: 0 !important;
-}
-.adyen-checkout__payment-method__header:before {
-  box-shadow: var(--radio-input__box-shadow);
-  border: var(--radio-input__border);
-  content: "";
-  display: block;
-  width: var(--radio-input__width);
-  height: var(--radio-input__height);
-  border-radius: 50%;
-}
-.adyen-checkout__payment-method__header__title:hover {
-  color: var(--font__color);
-  background: transparent;
-  border: none;
-}
-.adyen-checkout__payment-method__header__title:focus {
-  color: var(--font__color);
-  background: transparent;
-  border: none;
-}
-.adyen-checkout__payment-method__details {
-  padding: 0 !important;
-}
-
-.adyen-checkout__card-input {
-  margin-top: var(--indent__s);
-}
-
-#adyen-dropin-container-new {
-  padding-top: var(--adyen-container-padding-top, var(--indent__s));
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method__name {
-  font-size: var(--adyen-font-size, var(--font__s));
-  font-weight: var(--adyen-font-weight, var(--font-weight__semibold));
-  color: var(--adyen-font-color, var(--font__color));
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method {
-  background: var(--radio-input-wrapper__background-color);
-  border: var(--radio-input-wrapper__border-weight) var(--base__border-style) var(--radio-input-wrapper__border-color);
-  border-radius: var(--radio-input-wrapper__border-radius);
-  padding: var(--indent__base);
-  position: relative;
-  margin-bottom: var(--indent__base);
-  max-height: initial;
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method:last-child {
-  margin-bottom: 0;
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method__header__title {
-  flex-direction: row-reverse;
-  flex-grow: 1;
-  font-family: var(--font-family__copy);
-  justify-content: space-between;
-  margin-right: 0;
-  padding: 0 0 0 var(--indent__m);
-  position: relative;
-  text-transform: initial;
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method__image__wrapper {
-  margin-right: 0;
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method__radio {
-  display: none;
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method__details__content {
-  display: none;
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method__brands {
-  display: none;
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method--selected {
-  background: var(--adyen-drop-in-selected__background, var(--radio-input-wrapper__background-color-active));
-  border: var(--selected-border, var(--radio-input-wrapper__border-weight-active) var(--base__border-style) var(--radio-input-wrapper__border-color-active));
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method--selected .adyen-checkout__payment-method__header:before {
-  border: var(--radio-input__border-checked);
-  box-shadow: var(--radio-input__box-shadow-checked);
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method--selected .adyen-checkout__payment-method__details {
-  display: grid;
-  gap: var(--indent__base);
-  margin-right: var(--payment-method-detail-margin, 0);
-}
-#adyen-dropin-container-new .adyen-checkout__payment-method--selected .adyen-checkout__payment-method__details__content {
-  display: block;
-  margin: var(--indent__base) 0 0;
-}
-#adyen-dropin-container-new .adyen-checkout__checkbox {
-  margin-top: var(--indent__base);
-}
-#adyen-dropin-container-new .adyen-checkout__checkbox input[name=storeDetails] {
-  display: none;
-}
-#adyen-dropin-container-new .adyen-checkout__store-details {
-  margin-top: 0;
-}
-
-.adyen-checkout__dropdown__list--active {
-  position: relative;
-}
-
-.adyen-checkout-form-instruction {
-  display: none;
-}
-
-@media screen and (max-width: 768px) {
-  #adyen-dropin-container-new {
-    padding-bottom: 0;
-  }
-  #adyen-dropin-container-new .adyen-checkout__payment-method--selected {
-    background: transparent;
-  }
-}
 #adyen-apple-pay {
   line-height: var(--button__line-height);
 }
@@ -192,6 +12,22 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
   width: 100%;
 }
 
+.payment-page {
+  padding: 0 var(--indent__base--mobile);
+}
+.payment-page .payment-form {
+  margin-top: var(--indent__base);
+}
+
+@media screen and (min-width: 768px) {
+  .payment-page {
+    padding: 0;
+  }
+  .payment-page .payment-form {
+    background: var(--color__primary-white);
+    padding: var(--form-details-padding-desktop, 40px 40px 70px);
+  }
+}
 .adyen-checkout__input {
   background: var(--adyen-checkout-input__background-color, var(--input__background-color));
   border-radius: var(--input__border-radius);
@@ -595,6 +431,27 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
     margin: var(--footer-icon-margin, 0 10px);
   }
 }
+#adyen-google-pay {
+  line-height: var(--button__line-height);
+}
+#adyen-google-pay.text-loading {
+  border-radius: var(--button__text-placeholder-bg-radius);
+  height: var(--adyen-express-button-height, 48px);
+}
+#adyen-google-pay button {
+  border-radius: var(--button__border-radius);
+  height: var(--adyen-express-button-height, 48px);
+  overflow: hidden;
+  width: 100%;
+}
+#adyen-google-pay button .gpay-card-info-iframe {
+  height: 40px;
+}
+
+#adyen-threeds-container {
+  z-index: 300;
+}
+
 .adyen-payment-icons {
   width: var(--footer-icons-width-mobile, auto);
 }
@@ -628,27 +485,6 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
     margin: var(--footer-icon-margin, 0 10px);
   }
 }
-#adyen-google-pay {
-  line-height: var(--button__line-height);
-}
-#adyen-google-pay.text-loading {
-  border-radius: var(--button__text-placeholder-bg-radius);
-  height: var(--adyen-express-button-height, 48px);
-}
-#adyen-google-pay button {
-  border-radius: var(--button__border-radius);
-  height: var(--adyen-express-button-height, 48px);
-  overflow: hidden;
-  width: 100%;
-}
-#adyen-google-pay button .gpay-card-info-iframe {
-  height: 40px;
-}
-
-#adyen-threeds-container {
-  z-index: 300;
-}
-
 .adyen-checkout__payment-method-tick {
   align-self: self-start;
   display: flex;
