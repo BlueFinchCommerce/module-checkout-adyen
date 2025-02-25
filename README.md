@@ -1,4 +1,4 @@
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/bluefinchcommerce/module-checkout-adyen/tree/main.svg?style=svg&circle-token=CCIPRJ_Cmqt1nhoUVKpy4YUYkmPE8_a696d6ac2b4c7f9d57979c25a35167a4be7c14dc)](https://dl.circleci.com/status-badge/redirect/gh/bluefinchcommerce/module-checkout-adyen/tree/main)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/BlueFinchCommerce/module-checkout-adyen/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/BlueFinchCommerce/module-checkout-adyen/tree/develop)
 
 ![Checkout Powered by BlueFinch](./assets/logo.svg)
 
@@ -25,6 +25,11 @@ For information about a module installation in Adobe Commerce, see [Enable or di
 Remember to clear any appropriate caches.
 
 Once installed the module follows the same configuration settings as prescribed by the official Adyen integration documentation, see [Adyen for Magento](https://docs.adyen.com/plugins/adobe-commerce/).
+
+
+## Local frontend development workflow
+
+Please refer to the local frontend development workflow section of the [BlueFinch Checkout contributing guidelines](https://github.com/BlueFinchCommerce/module-checkout/blob/main/.github/CONTRIBUTING.md), that applies to all BlueFinch Checkout extension modules, such as this one.
 
 ## CircleCi
 
