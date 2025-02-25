@@ -26,10 +26,6 @@
     "magento": {
       "type": "composer",
       "url": "https://mirror.mage-os.org/"
-    },
-    "checkout": {
-      "type": "git",
-      "url": "https://github.com/BlueFinchCommerce/module-checkout"
     }
   },
   "authors": [
