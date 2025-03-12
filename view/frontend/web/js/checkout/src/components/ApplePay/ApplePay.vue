@@ -65,6 +65,11 @@ export default {
     this.Recaptcha = Recaptcha;
     this.getTypeByPlacement = recaptchaStore.getTypeByPlacement;
 
+    // Always fetch initial config and cart data
+    await configStore.getInitialConfig();
+    await this.getInitialConfigValues();
+    await cartStore.getCart();
+
     // Get available payment methods
     const paymentMethodsResponse = await this.getPaymentMethodsResponse();
 
@@ -78,11 +83,6 @@ export default {
     if (!window.ApplePaySession || !window.ApplePaySession.canMakePayments) {
       return; // Exit if Apple Pay isn't supported, but reCAPTCHA will still render
     }
-
-    // Always fetch initial config and cart data
-    await configStore.getInitialConfig();
-    await this.getInitialConfigValues();
-    await cartStore.getCart();
 
     paymentStore.addExpressMethod(this.key);
     this.applePayLoaded = false;
