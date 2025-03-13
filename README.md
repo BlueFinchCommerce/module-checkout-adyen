@@ -1,5 +1,7 @@
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/BlueFinchCommerce/module-checkout-adyen/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/BlueFinchCommerce/module-checkout-adyen/tree/main)
 
+[![GNU General Public License Version 3](./assets/license-GPLv3.svg)](https://github.com/BlueFinchCommerce/module-checkout-adyen/?tab=GPL-3.0-1-ov-file#readme)
+
 ![Checkout Powered by BlueFinch](./assets/logo.svg)
 
 # BlueFinch Checkout Adyen Module
