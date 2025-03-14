@@ -280,6 +280,15 @@ export default {
             resolve(window.ApplePaySession.STATUS_SUCCESS);
             await refreshCustomerData(getCartSectionNames());
             window.location.href = getSuccessPageUrl();
+          })
+          .catch((error) => {
+            const errors = {
+              errors: [
+                new window.ApplePayError('unknown', 'country', error.message),
+              ],
+            };
+
+            resolve(errors);
           });
       } catch (error) {
         const errors = {
@@ -323,8 +332,9 @@ export default {
 
         const methods = result.shipping_addresses[0].available_shipping_methods;
 
-        const filteredMethods = methods.filter(({ method_code: methodCode }) => (
-          methodCode !== 'nominated_delivery'
+        // Filter out nominated day and methods that are not available.
+        const filteredMethods = methods.filter(({ method_code: methodCode, available }) => (
+          methodCode !== 'nominated_delivery' && available
         ));
 
         // If there are no shipping methods available show an error.
