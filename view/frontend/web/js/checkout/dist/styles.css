@@ -213,39 +213,6 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
     background: transparent;
   }
 }
-.adyen-footer-icons {
-  width: var(--footer-icons-width-mobile, auto);
-}
-.adyen-footer-icons ul {
-  padding: 0;
-  margin: var(--footer-icons-margin-mobile, var(--indent__s) 0);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: var(--footer-icons-align-items, center);
-  justify-content: center;
-  height: 100%;
-}
-.adyen-footer-icons ul li {
-  display: block;
-  list-style: none;
-  margin: var(--footer-icon-margin-mobile, 0 10px);
-  height: 100%;
-}
-.adyen-footer-icons ul li img {
-  height: var(--footer-icons-min-height, 25px);
-}
-
-@media (min-width: 768px) {
-  .adyen-footer-icons {
-    width: var(--footer-icons-width-desktop, auto);
-  }
-  .adyen-footer-icons ul {
-    margin: 0 0 0;
-  }
-  .adyen-footer-icons ul li {
-    margin: var(--footer-icon-margin, 0 10px);
-  }
-}
 .adyen-checkout__input {
   background: var(--adyen-checkout-input__background-color, var(--input__background-color));
   border-radius: var(--input__border-radius);
@@ -429,6 +396,39 @@ button.adyen-checkout__button.adyen-checkout__button--loading {
   }
   #adyen-dropin-container-new .adyen-checkout__payment-method--selected {
     background: transparent;
+  }
+}
+.adyen-footer-icons {
+  width: var(--footer-icons-width-mobile, auto);
+}
+.adyen-footer-icons ul {
+  padding: 0;
+  margin: var(--footer-icons-margin-mobile, var(--indent__s) 0);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: var(--footer-icons-align-items, center);
+  justify-content: center;
+  height: 100%;
+}
+.adyen-footer-icons ul li {
+  display: block;
+  list-style: none;
+  margin: var(--footer-icon-margin-mobile, 0 10px);
+  height: 100%;
+}
+.adyen-footer-icons ul li img {
+  height: var(--footer-icons-min-height, 25px);
+}
+
+@media (min-width: 768px) {
+  .adyen-footer-icons {
+    width: var(--footer-icons-width-desktop, auto);
+  }
+  .adyen-footer-icons ul {
+    margin: 0 0 0;
+  }
+  .adyen-footer-icons ul li {
+    margin: var(--footer-icon-margin, 0 10px);
   }
 }
 #adyen-google-pay {
