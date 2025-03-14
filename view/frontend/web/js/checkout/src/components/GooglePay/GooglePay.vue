@@ -276,20 +276,10 @@ export default {
 
           const methods = response.shipping_addresses[0].available_shipping_methods;
 
-          const shippingMethods = methods.map((shippingMethod) => {
-            const description = shippingMethod.carrier_title
-              ? `${formatPrice(shippingMethod.price_incl_tax.value)} ${shippingMethod.carrier_title}`
-              : formatPrice(shippingMethod.price_incl_tax.value);
-
-            return {
-              id: shippingMethod.method_code,
-              label: shippingMethod.method_title,
-              description,
-            };
-          });
-
-          // Filter out nominated day as this isn't available inside of Google Pay.
-          const fShippingMethods = shippingMethods.filter((sid) => sid.id !== 'nominated_delivery');
+          // Filter out nominated day and methods that are not available.
+          const fShippingMethods = methods.filter((sid) => (
+            sid.method_code !== 'nominated_delivery' && sid.available
+          ));
 
           // Any error message means we need to exit by resolving with an error state.
           if (!fShippingMethods.length) {
@@ -303,9 +293,21 @@ export default {
             return;
           }
 
+          const shippingMethods = fShippingMethods.map((shippingMethod) => {
+            const description = shippingMethod.carrier_title
+              ? `${formatPrice(shippingMethod.price_incl_tax.value)} ${shippingMethod.carrier_title}`
+              : formatPrice(shippingMethod.price_incl_tax.value);
+
+            return {
+              id: shippingMethod.method_code,
+              label: shippingMethod.method_title,
+              description,
+            };
+          });
+
           const selectedShipping = data.shippingOptionData.id === 'shipping_option_unselected'
-            ? methods[0]
-            : methods.find(({ method_code: id }) => id === data.shippingOptionData.id) || methods[0];
+            ? fShippingMethods[0]
+            : fShippingMethods.find(({ method_code: id }) => id === data.shippingOptionData.id) || fShippingMethods[0];
 
           await shippingMethodsStore.submitShippingInfo(selectedShipping.carrier_code, selectedShipping.method_code);
 
@@ -318,7 +320,7 @@ export default {
           const paymentDataRequestUpdate = {
             newShippingOptionParameters: {
               defaultSelectedOptionId: selectedShipping.method_code,
-              shippingOptions: fShippingMethods,
+              shippingOptions: shippingMethods,
             },
             newTransactionInfo: {
               displayItems: [
