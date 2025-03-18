@@ -65,6 +65,11 @@ export default {
     this.Recaptcha = Recaptcha;
     this.getTypeByPlacement = recaptchaStore.getTypeByPlacement;
 
+    // Always fetch initial config and cart data
+    await configStore.getInitialConfig();
+    await this.getInitialConfigValues();
+    await cartStore.getCart();
+
     // Get available payment methods
     const paymentMethodsResponse = await this.getPaymentMethodsResponse();
 
@@ -78,11 +83,6 @@ export default {
     if (!window.ApplePaySession || !window.ApplePaySession.canMakePayments) {
       return; // Exit if Apple Pay isn't supported, but reCAPTCHA will still render
     }
-
-    // Always fetch initial config and cart data
-    await configStore.getInitialConfig();
-    await this.getInitialConfigValues();
-    await cartStore.getCart();
 
     paymentStore.addExpressMethod(this.key);
     this.applePayLoaded = false;
@@ -280,6 +280,15 @@ export default {
             resolve(window.ApplePaySession.STATUS_SUCCESS);
             await refreshCustomerData(getCartSectionNames());
             window.location.href = getSuccessPageUrl();
+          })
+          .catch((error) => {
+            const errors = {
+              errors: [
+                new window.ApplePayError('unknown', 'country', error.message),
+              ],
+            };
+
+            resolve(errors);
           });
       } catch (error) {
         const errors = {
@@ -323,8 +332,9 @@ export default {
 
         const methods = result.shipping_addresses[0].available_shipping_methods;
 
-        const filteredMethods = methods.filter(({ method_code: methodCode }) => (
-          methodCode !== 'nominated_delivery'
+        // Filter out nominated day and methods that are not available.
+        const filteredMethods = methods.filter(({ method_code: methodCode, available }) => (
+          methodCode !== 'nominated_delivery' && available
         ));
 
         // If there are no shipping methods available show an error.
