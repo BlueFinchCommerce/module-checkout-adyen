@@ -3,6 +3,7 @@
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
  * @var \BlueFinch\CheckoutAdyen\ViewModel\Assets $assetViewModel
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 
 $assetViewModel = $block->getAssetViewModel();
@@ -18,26 +19,27 @@ $onLogin = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/chec
 $styles = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/checkout/dist/styles.css');
 ?>
 
-<script>
-  window.bluefinchCheckout = window.bluefinchCheckout || {};
+<?php $scriptString = <<<script
+    window.bluefinchCheckout = window.bluefinchCheckout || {};
 
-  window.bluefinchCheckout.expressPaymentMethods = window.bluefinchCheckout.expressPaymentMethods || {};
-  window.bluefinchCheckout.additionalVaultedMethods = window.bluefinchCheckout.additionalVaultedMethods || {};
-  window.bluefinchCheckout.paymentMethods = window.bluefinchCheckout.paymentMethods || {};
-  window.bluefinchCheckout.footerPaymentIcons = window.bluefinchCheckout.footerPaymentIcons || {};
-  window.bluefinchCheckout.paymentIcons = window.bluefinchCheckout.paymentIcons || {};
-  window.bluefinchCheckout.callbacks = window.bluefinchCheckout.callbacks || {};
-  window.bluefinchCheckout.callbacks.onCreate = window.bluefinchCheckout.callbacks.onCreate || {};
-  window.bluefinchCheckout.callbacks.onLogin = window.bluefinchCheckout.callbacks.onLogin || {};
+    window.bluefinchCheckout.expressPaymentMethods = window.bluefinchCheckout.expressPaymentMethods || {};
+    window.bluefinchCheckout.additionalVaultedMethods = window.bluefinchCheckout.additionalVaultedMethods || {};
+    window.bluefinchCheckout.paymentMethods = window.bluefinchCheckout.paymentMethods || {};
+    window.bluefinchCheckout.footerPaymentIcons = window.bluefinchCheckout.footerPaymentIcons || {};
+    window.bluefinchCheckout.paymentIcons = window.bluefinchCheckout.paymentIcons || {};
+    window.bluefinchCheckout.callbacks = window.bluefinchCheckout.callbacks || {};
+    window.bluefinchCheckout.callbacks.onCreate = window.bluefinchCheckout.callbacks.onCreate || {};
+    window.bluefinchCheckout.callbacks.onLogin = window.bluefinchCheckout.callbacks.onLogin || {};
 
-  window.bluefinchCheckout.expressPaymentMethods.AdyenApplePay = "<?= $escaper->escapeJs($applePay) ?>";
-  window.bluefinchCheckout.expressPaymentMethods.AdyenGooglePay = "<?= $escaper->escapeJs($googlePay) ?>";
-  window.bluefinchCheckout.additionalVaultedMethods.AdyenVaultedMethods = "<?= $escaper->escapeJs($vaulted) ?>";
-  window.bluefinchCheckout.paymentMethods.Adyen = "<?= $escaper->escapeJs($dropIn) ?>";
-  window.bluefinchCheckout.footerPaymentIcons.AdyenFooterIcons = "<?= $escaper->escapeJs($icons) ?>";
-  window.bluefinchCheckout.paymentIcons.AdyenIcons = "<?= $escaper->escapeJs($paymentIcons) ?>";
-  window.bluefinchCheckout.callbacks.onCreate.adyenOnCreate = "<?= $escaper->escapeJs($onCreate) ?>";
-  window.bluefinchCheckout.callbacks.onLogin.adyenOnLogin = "<?= $escaper->escapeJs($onLogin) ?>";
-</script>
+    window.bluefinchCheckout.expressPaymentMethods.AdyenApplePay = "{$escaper->escapeJs($applePay)}";
+    window.bluefinchCheckout.expressPaymentMethods.AdyenGooglePay = "{$escaper->escapeJs($googlePay)}";
+    window.bluefinchCheckout.additionalVaultedMethods.AdyenVaultedMethods = "{$escaper->escapeJs($vaulted)}";
+    window.bluefinchCheckout.paymentMethods.Adyen = "{$escaper->escapeJs($dropIn)}";
+    window.bluefinchCheckout.footerPaymentIcons.AdyenFooterIcons = "{$escaper->escapeJs($icons)}";
+    window.bluefinchCheckout.paymentIcons.AdyenIcons = "{$escaper->escapeJs($paymentIcons)}";
+    window.bluefinchCheckout.callbacks.onCreate.adyenOnCreate = "{$escaper->escapeJs($onCreate)}";
+    window.bluefinchCheckout.callbacks.onLogin.adyenOnLogin = "{$escaper->escapeJs($onLogin)}";
+script; ?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 
 <link rel="stylesheet" href="<?= $escaper->escapeHtmlAttr($styles) ?>" />
