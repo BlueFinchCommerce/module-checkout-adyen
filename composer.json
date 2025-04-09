@@ -39,5 +39,8 @@
       "magento/composer-dependency-version-audit-plugin": true,
       "dealerdirect/phpcodesniffer-composer-installer": true
     }
-  }
+  },
+  "license": [
+    "GPL-3.0-only"
+  ]
 }
