@@ -218,6 +218,9 @@ export default {
         threeDS2: {
           challengeWindowSize: '05',
         },
+        paypal: {
+          cspNonce: window.adyenCspNonce,
+        },
       },
     };
 
