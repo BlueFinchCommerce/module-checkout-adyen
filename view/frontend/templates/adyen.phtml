@@ -5,10 +5,6 @@
  * @var \BlueFinch\CheckoutAdyen\ViewModel\Assets $assetViewModel
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
-use BlueFinch\Checkout\Helper\CspHelper;
-
-$cspHelper = $this->helper(CspHelper::class);
-$cspNonce = $cspHelper->getCspNonce();
 
 $assetViewModel = $block->getAssetViewModel();
 
@@ -43,8 +39,6 @@ $styles = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/check
     window.bluefinchCheckout.paymentIcons.AdyenIcons = "{$escaper->escapeJs($paymentIcons)}";
     window.bluefinchCheckout.callbacks.onCreate.adyenOnCreate = "{$escaper->escapeJs($onCreate)}";
     window.bluefinchCheckout.callbacks.onLogin.adyenOnLogin = "{$escaper->escapeJs($onLogin)}";
-
-    window.adyenCspNonce = "$cspNonce";
 script; ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 

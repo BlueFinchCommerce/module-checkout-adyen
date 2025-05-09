@@ -219,7 +219,7 @@ export default {
           challengeWindowSize: '05',
         },
         paypal: {
-          cspNonce: window.adyenCspNonce,
+          cspNonce: window.cspNonce,
         },
       },
     };
