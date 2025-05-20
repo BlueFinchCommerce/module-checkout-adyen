@@ -13,7 +13,8 @@
   },
   "require": {
     "magento/framework": "*",
-    "bluefinchcommerce/module-checkout": "^1.0"
+    "bluefinchcommerce/module-checkout": "^1.0",
+    "adyen/module-payment": ">7.0.0"
   },
   "require-dev": {
     "magento/magento-coding-standard": "*",
