@@ -1,13 +1,15 @@
 <template>
-  <div
-    id="adyen-google-pay"
-    :class="!googlePayLoaded ? 'text-loading' : ''"
-    :data-cy="'instant-checkout-adyenGooglePay'"
-  />
-  <div
-    v-show="threeDSVisible"
-    id="adyen-threeds-container"
-  />
+  <div>
+    <div
+      id="adyen-google-pay"
+      :class="!googlePayLoaded ? 'text-loading' : ''"
+      :data-cy="'instant-checkout-adyenGooglePay'"
+    />
+    <div
+      v-show="threeDSVisible"
+      id="adyen-threeds-container"
+    />
+  </div>
 </template>
 
 <script>
