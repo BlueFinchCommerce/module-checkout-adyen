@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b171b49c215978f1e79ec9dbec78c3b1",
+    "content-hash": "8a9d9ad442fd01ffc8755336921cd9af",
     "packages": [
         {
             "name": "adyen/module-payment",
@@ -9372,17 +9372,17 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "38",
+            "version": "35",
             "dist": {
                 "type": "zip",
-                "url": "https://mirror.mage-os.org/packages/magento/magento-coding-standard-38.zip",
-                "shasum": "445052ee2c16f1b7e2c7d7e31f5c12b739edfebf"
+                "url": "https://mirror.mage-os.org/packages/magento/magento-coding-standard-35.zip",
+                "shasum": "ea78f8688f9cba1184c62024cbf8e17f2491029c"
             },
             "require": {
                 "ext-dom": "*",
                 "ext-simplexml": "*",
                 "magento/php-compatibility-fork": "^0.1",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
                 "phpcsstandards/phpcsutils": "^1.0.5",
                 "rector/rector": "^1.2.4",
                 "squizlabs/php_codesniffer": "^3.6.1",

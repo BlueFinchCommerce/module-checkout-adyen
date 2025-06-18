@@ -17,7 +17,7 @@
     "adyen/module-payment": ">7.0.0"
   },
   "require-dev": {
-    "magento/magento-coding-standard": "*",
+    "magento/magento-coding-standard": "<=35",
     "phpcompatibility/php-compatibility": "*",
     "phpunit/phpunit": "*",
     "phpstan/phpstan": "^1.9",
