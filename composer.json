@@ -13,15 +13,17 @@
   },
   "require": {
     "magento/framework": "*",
-    "bluefinchcommerce/module-checkout": "^1.0"
+    "bluefinchcommerce/module-checkout": "^1.0",
+    "adyen/module-payment": ">7.0.0"
   },
   "require-dev": {
-    "magento/magento-coding-standard": "*",
+    "magento/magento-coding-standard": "<=35",
     "phpcompatibility/php-compatibility": "*",
     "phpunit/phpunit": "*",
     "phpstan/phpstan": "^1.9",
     "squizlabs/php_codesniffer": "^3.6",
-    "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "adyen/adyen-magento2-expresscheckout": "^2.4"
   },
   "repositories": {
     "magento": {

@@ -2,9 +2,10 @@
 /**
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
- * @var \BlueFinch\CheckoutAdyen\ViewModel\Assets $assetViewModel
+ * @var \BlueFinch\Checkout\ViewModel\Assets $assetViewModel
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
+
 
 $assetViewModel = $block->getAssetViewModel();
 
@@ -31,8 +32,22 @@ $styles = $assetViewModel->getDistViewFileUrl('BlueFinch_CheckoutAdyen::js/check
     window.bluefinchCheckout.callbacks.onCreate = window.bluefinchCheckout.callbacks.onCreate || {};
     window.bluefinchCheckout.callbacks.onLogin = window.bluefinchCheckout.callbacks.onLogin || {};
 
-    window.bluefinchCheckout.expressPaymentMethods.AdyenApplePay = "{$escaper->escapeJs($applePay)}";
-    window.bluefinchCheckout.expressPaymentMethods.AdyenGooglePay = "{$escaper->escapeJs($googlePay)}";
+    window.bluefinchCheckout.placeholderExpressMethods = window.bluefinchCheckout.placeholderExpressMethods || [];
+
+    const cart = JSON.parse(localStorage.getItem('mage-cache-storage'))?.cart;
+    const googlePayEnabled = cart?.bluefinch_adyen_payment_methods?.paymentMethodsResponse?.paymentMethods?.find(({ type }) => type === 'googlepay');
+    const applePayEnabled = cart?.bluefinch_adyen_payment_methods?.paymentMethodsResponse?.paymentMethods?.find(({ type }) => type === 'applepay');
+
+    if (googlePayEnabled) {
+        window.bluefinchCheckout.placeholderExpressMethods.push('adyenGooglePay');
+        window.bluefinchCheckout.expressPaymentMethods.AdyenGooglePay = "{$escaper->escapeJs($googlePay)}";
+    }
+
+    if (applePayEnabled && window.ApplePaySession && window.ApplePaySession.canMakePayments) {
+        window.bluefinchCheckout.placeholderExpressMethods.push('adyenApplePay');
+        window.bluefinchCheckout.expressPaymentMethods.AdyenApplePay = "{$escaper->escapeJs($applePay)}";
+    }
+
     window.bluefinchCheckout.additionalVaultedMethods.AdyenVaultedMethods = "{$escaper->escapeJs($vaulted)}";
     window.bluefinchCheckout.paymentMethods.Adyen = "{$escaper->escapeJs($dropIn)}";
     window.bluefinchCheckout.footerPaymentIcons.AdyenFooterIcons = "{$escaper->escapeJs($icons)}";
